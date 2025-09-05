@@ -1,0 +1,68 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Función para verificar si el usuario es administrador
+    function isAdmin() {
+      return request.auth != null && 
+             (request.auth.token.email == 'melenasdoblaktocas3@gmail.com' ||
+              get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
+    }
+    
+    // Reglas para usuarios - permitir que cualquier usuario autenticado cree su propio perfil
+    match /users/{userId} {
+      // Permitir lectura y escritura solo al usuario autenticado que coincida con el ID del documento
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+      
+      // Permitir lectura a administradores
+      allow read: if isAdmin();
+    }
+    
+    // Reglas para categorías
+    match /categories/{categoryId} {
+      // Permitir lectura a todos (autenticados y no autenticados)
+      allow read: if true;
+      
+      // Permitir escritura solo a administradores
+      allow write: if isAdmin();
+    }
+    
+    // Reglas para entradas
+    match /entries/{entryId} {
+      // Permitir lectura a todos (autenticados y no autenticados)
+      allow read: if true;
+      
+      // Permitir escritura solo a administradores
+      allow write: if isAdmin();
+    }
+
+    // Reglas para comentarios
+    match /comments/{commentId} {
+      // Permitir lectura a todos (autenticados y no autenticados)
+      allow read: if true;
+      
+      // Permitir creación a usuarios autenticados
+      allow create: if request.auth != null;
+      
+      // Permitir actualización y eliminación solo al autor del comentario
+      allow update, delete: if request.auth != null && 
+                           request.auth.uid == resource.data.authorId;
+    }
+    
+    // Reglas para perfiles de usuario
+    match /userProfiles/{userId} {
+      // Permitir creación si el usuario está autenticado y el ID coincide
+      allow create: if request.auth != null && request.auth.uid == userId;
+      
+      // Permitir lectura y actualización solo al usuario autenticado que coincida con el ID del documento
+      allow read, update: if request.auth != null && request.auth.uid == userId;
+      
+      // Permitir lectura a administradores
+      allow read: if isAdmin();
+    }
+    
+    // Reglas por defecto - denegar todo lo demás
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

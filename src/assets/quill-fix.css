@@ -1,0 +1,43 @@
+/* Estilos globales para Quill Editor */
+.ql-container {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  min-height: 400px !important;
+}
+
+.ql-toolbar {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+.ql-editor {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 400px !important;
+  box-sizing: border-box !important;
+}
+
+/* Asegurar que no haya estilos inline que oculten el editor */
+.ql-container[style*="display: none"] {
+  display: block !important;
+}
+
+.ql-toolbar[style*="display: none"] {
+  display: block !important;
+}
+
+.ql-editor[style*="display: none"] {
+  display: block !important;
+}
+
+
+
+
+

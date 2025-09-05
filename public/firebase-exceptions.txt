@@ -1,0 +1,39 @@
+# Reglas de excepción para uBlock Origin - Firebase
+# Agrega estas reglas en uBlock Origin para permitir las conexiones de Firebase
+
+# Permitir conexiones a Firebase - Reglas más específicas
+@@||firebase.googleapis.com^
+@@||identitytoolkit.googleapis.com^
+@@||fastfocus-bfdef.firebaseapp.com^
+@@||fastfocus-bfdef.firebasestorage.app^
+@@||fastfocus-bfdef-default-rtdb.europe-west1.firebasedatabase.app^
+@@||googleapis.com^$domain=localhost
+@@||googleapis.com^$domain=127.0.0.1
+@@||googleapis.com^$domain=fastfocus-bfdef.firebaseapp.com
+
+# Permitir WebSocket para Firestore - Reglas específicas
+@@||firestore.googleapis.com/google.firestore.v1.Firestore/Listen/channel^
+@@||firestore.googleapis.com^$websocket
+@@||firestore.googleapis.com^$domain=localhost
+@@||firestore.googleapis.com^$domain=127.0.0.1
+
+# Permitir analytics de Firebase
+@@||google-analytics.com^
+@@||googletagmanager.com^
+@@||doubleclick.net^$domain=fastfocus-bfdef.firebaseapp.com
+
+# Reglas adicionales para desarrollo local
+@@||localhost:*
+@@||127.0.0.1:*
+@@||*googleapis.com*$domain=localhost
+@@||*googleapis.com*$domain=127.0.0.1
+
+# Instrucciones paso a paso:
+# 1. Abre uBlock Origin
+# 2. Haz clic en el ícono de uBlock Origin en la barra de herramientas
+# 3. Haz clic en el ícono de engranaje ⚙️
+# 4. Ve a la pestaña "Filtros"
+# 5. En "Mis filtros", agrega TODAS las reglas de arriba
+# 6. Haz clic en "Aplicar cambios"
+# 7. Recarga la página completamente (Ctrl+F5)
+# 8. Si sigue bloqueando, deshabilita uBlock Origin temporalmente
