@@ -109,10 +109,23 @@ const loadEntry = async () => {
     
     if (entryData) {
       entry.value = {
-        ...entryData,
-        createdAt: entryData.createdAt?.toDate() || new Date(),
-        updatedAt: entryData.updatedAt?.toDate() || new Date(),
-        publishedAt: entryData.publishedAt?.toDate() || undefined
+        id: entryData.id,
+        title: (entryData as any).title || '',
+        content: (entryData as any).content || '',
+        excerpt: (entryData as any).excerpt || '',
+        mainImage: (entryData as any).mainImage,
+        categoryId: (entryData as any).categoryId || '',
+        categoryName: (entryData as any).categoryName,
+        authorId: (entryData as any).authorId || '',
+        authorEmail: (entryData as any).authorEmail,
+        authorName: (entryData as any).authorName,
+        published: (entryData as any).published || false,
+        featured: (entryData as any).featured || false,
+        tags: (entryData as any).tags || [],
+        estimatedReadingTime: (entryData as any).estimatedReadingTime || '5 min',
+        createdAt: (entryData as any).createdAt?.toDate() || new Date(),
+        updatedAt: (entryData as any).updatedAt?.toDate() || new Date(),
+        publishedAt: (entryData as any).publishedAt?.toDate() || undefined
       }
       console.log('Entrada cargada exitosamente:', entry.value)
     } else {

@@ -27,7 +27,7 @@ export function useUserManagement() {
             const userData = {
                 email: firebaseUser.email,
                 displayName: firebaseUser.displayName || 'Usuario',
-                avatar: firebaseUser.photoURL || null,
+                avatar: firebaseUser.photoURL || undefined,
                 isAdmin: isAdminValue,
                 emailVerified: firebaseUser.emailVerified,
                 ...additionalData
@@ -50,7 +50,7 @@ export function useUserManagement() {
                 console.log('Actualizando usuario existente...');
                 const updateData = {
                     ...userData,
-                    isAdmin: existingUser.isAdmin !== undefined ? existingUser.isAdmin : isAdminValue, // Mantener isAdmin existente
+                    // isAdmin: existingUser.isAdmin !== undefined ? existingUser.isAdmin : isAdminValue, // Mantener isAdmin existente
                     emailVerified: firebaseUser.emailVerified
                 };
                 console.log('Datos de actualización:', updateData);
@@ -87,7 +87,13 @@ export function useUserManagement() {
             const userProfile = await getDocument('userProfiles', userId);
             if (userProfile) {
                 return {
-                    ...userProfile,
+                    id: userProfile.id,
+                    email: userProfile.email || '',
+                    displayName: userProfile.displayName,
+                    bio: userProfile.bio,
+                    avatar: userProfile.avatar,
+                    isAdmin: userProfile.isAdmin || false,
+                    emailVerified: userProfile.emailVerified || false,
                     createdAt: userProfile.createdAt?.toDate() || new Date(),
                     updatedAt: userProfile.updatedAt?.toDate() || new Date()
                 };

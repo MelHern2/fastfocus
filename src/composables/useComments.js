@@ -20,8 +20,19 @@ export function useComments() {
             console.log('Resultado de getCollection:', result);
             console.log('Número de comentarios obtenidos de BD:', result.length);
             comments.value = result
-                .map(comment => ({
-                ...comment,
+                .map((comment) => ({
+                id: comment.id,
+                entryId: comment.entryId || '',
+                content: comment.content || '',
+                authorId: comment.authorId || '',
+                authorEmail: comment.authorEmail || '',
+                authorName: comment.authorName,
+                parentId: comment.parentId,
+                replies: comment.replies || [],
+                isEdited: comment.isEdited || false,
+                editedAt: comment.editedAt?.toDate(),
+                likes: comment.likes || [],
+                dislikes: comment.dislikes || [],
                 createdAt: comment.createdAt?.toDate() || new Date(),
                 updatedAt: comment.updatedAt?.toDate() || new Date()
             }))
@@ -71,7 +82,7 @@ export function useComments() {
                     // Agregar información de a quién se está respondiendo
                     commentWithReplies.replyingTo = {
                         id: parent.id,
-                        authorName: parent.authorName,
+                        authorName: parent.authorName || '',
                         authorEmail: parent.authorEmail
                     };
                     parent.replies.push(commentWithReplies);

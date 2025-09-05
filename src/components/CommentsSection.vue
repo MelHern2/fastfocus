@@ -183,7 +183,7 @@ const handleSubmitComment = async () => {
     newCommentContent.value = ''
   } catch (error) {
     console.error('Error al crear comentario:', error)
-    showError('Error al crear el comentario: ' + error.message)
+    showError('Error al crear el comentario: ' + (error as any).message)
   } finally {
     submitting.value = false
   }

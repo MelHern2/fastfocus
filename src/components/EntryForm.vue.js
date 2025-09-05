@@ -67,7 +67,7 @@ watch(() => props.entry, (newEntry) => {
         // Actualizar el editor Quill
         nextTick(() => {
             if (quill) {
-                quill.setContents(quill.clipboard.convert(newEntry.content));
+                quill.setContents(quill.clipboard.convert({ html: newEntry.content }));
             }
         });
     }
@@ -117,7 +117,7 @@ onMounted(async () => {
         });
         // Cargar contenido inicial si está editando
         if (props.entry) {
-            quill.setContents(quill.clipboard.convert(props.entry.content));
+            quill.setContents(quill.clipboard.convert({ html: props.entry.content }));
         }
     }
 });

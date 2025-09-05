@@ -80,7 +80,7 @@ const closeNotification = () => {
   
   // Emitir evento después de la animación
   setTimeout(() => {
-    emit('close', props.notification.id)
+    emit('close', props.notification!.id)
     isClosing.value = false
   }, 300)
 }

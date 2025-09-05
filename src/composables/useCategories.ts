@@ -26,11 +26,14 @@ export function useCategories() {
   // Obtener todas las categorías
   const fetchCategories = async () => {
     const result = await getCollection('categories')
-    categories.value = result.map(cat => ({
-      ...cat,
+    categories.value = result.map((cat: any) => ({
+      id: cat.id,
+      name: cat.name || '',
+      description: cat.description || '',
+      parentId: cat.parentId,
       createdAt: cat.createdAt?.toDate() || new Date(),
       updatedAt: cat.updatedAt?.toDate() || new Date()
-    }))
+    } as Category))
     return categories.value
   }
   
@@ -46,10 +49,13 @@ export function useCategories() {
           const parentData = await getDocument('categories', category.parentId)
           if (parentData) {
             parent = {
-              ...parentData,
-              createdAt: parentData.createdAt?.toDate() || new Date(),
-              updatedAt: parentData.updatedAt?.toDate() || new Date()
-            }
+              id: parentData.id,
+              name: (parentData as any).name || '',
+              description: (parentData as any).description || '',
+              parentId: (parentData as any).parentId,
+              createdAt: (parentData as any).createdAt?.toDate() || new Date(),
+              updatedAt: (parentData as any).updatedAt?.toDate() || new Date()
+            } as Category
           }
         }
         
@@ -196,11 +202,14 @@ export function useCategories() {
   // Escuchar cambios en tiempo real
   const subscribeToCategories = (callback: (categories: Category[]) => void) => {
     return subscribeToCollection('categories', (docs) => {
-      const categoriesData = docs.map(doc => ({
-        ...doc,
+      const categoriesData = docs.map((doc: any) => ({
+        id: doc.id,
+        name: doc.name || '',
+        description: doc.description || '',
+        parentId: doc.parentId,
         createdAt: doc.createdAt?.toDate() || new Date(),
         updatedAt: doc.updatedAt?.toDate() || new Date()
-      }))
+      } as Category))
       categories.value = categoriesData
       callback(categoriesData)
     }, undefined, 'name')

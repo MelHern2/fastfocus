@@ -28,7 +28,7 @@ const loadEntries = async (page = 1) => {
     // Paginar las entradas
     const startIndex = offset
     const endIndex = startIndex + entriesPerPage
-    latestEntries.value = allEntries.slice(startIndex, endIndex)
+    latestEntries.value = allEntries.slice(startIndex, endIndex) as any
     
     currentPage.value = page
   } catch (error) {
@@ -597,5 +597,4 @@ const handleReadMore = (entryId: string) => {
     text-align: center;
   }
 }
-</style>
 </style>

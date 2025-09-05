@@ -154,7 +154,7 @@ else {
                         return;
                     if (!!(__VLS_ctx.documents.length === 0))
                         return;
-                    __VLS_ctx.deleteDocument(doc.id);
+                    __VLS_ctx.deleteDocument('test', doc.id);
                     // @ts-ignore
                     [deleteDocument,];
                 } },

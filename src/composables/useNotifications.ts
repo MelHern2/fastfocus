@@ -40,10 +40,16 @@ export function useNotifications() {
     ])
     
     notifications.value = result
-      .map(notification => ({
-        ...notification,
+      .map((notification: any) => ({
+        id: notification.id,
+        userId: notification.userId || '',
+        type: notification.type || 'mention',
+        title: notification.title || '',
+        message: notification.message || '',
+        isRead: notification.isRead || false,
         createdAt: notification.createdAt?.toDate() || new Date(),
-        updatedAt: notification.updatedAt?.toDate() || new Date()
+        updatedAt: notification.updatedAt?.toDate() || new Date(),
+        data: notification.data || {}
       }))
       .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()) // Más recientes primero
     

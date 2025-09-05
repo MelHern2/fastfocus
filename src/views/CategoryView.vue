@@ -171,7 +171,7 @@ const loadEntries = async () => {
     console.log('Cargando entradas para categoría:', categoryId.value)
     const categoryEntries = await fetchEntriesByCategory(categoryId.value)
     console.log('Entradas encontradas:', categoryEntries.length)
-    entries.value = categoryEntries
+    entries.value = categoryEntries as any
   } catch (error) {
     console.error('Error al cargar entradas:', error)
     entries.value = []

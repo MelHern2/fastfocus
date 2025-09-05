@@ -8,6 +8,7 @@ export interface Entry {
   categoryName?: string
   authorId: string
   authorEmail?: string
+  authorName?: string
   published: boolean
   featured: boolean
   tags: string[]

@@ -1,4 +1,4 @@
-import { ref, onMounted, computed, watch } from 'vue';
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { useAuth } from '@/composables/useAuth';
 import { useAdmin } from '@/composables/useAdmin';
@@ -12,6 +12,7 @@ const { categories, loading, fetchCategories, buildCategoryTree } = useCategorie
 const showDropdown = ref(false);
 const categoriesTree = ref([]);
 const hoveredCategory = ref(null);
+let hoverTimeout = null;
 // Detectar si estamos en la página de admin
 const isAdminPage = computed(() => {
     return route.path.startsWith('/admin');
@@ -36,6 +37,12 @@ const loadCategoriesTree = async () => {
 // Cargar categorías al montar el componente
 onMounted(async () => {
     await loadCategoriesTree();
+});
+// Limpiar timeout al desmontar
+onUnmounted(() => {
+    if (hoverTimeout) {
+        clearTimeout(hoverTimeout);
+    }
 });
 // Debug: verificar estado de admin
 console.log('NavBar - Usuario:', user.value?.email);

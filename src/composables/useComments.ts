@@ -41,8 +41,19 @@ export function useComments() {
       console.log('Número de comentarios obtenidos de BD:', result.length)
       
       comments.value = result
-        .map(comment => ({
-          ...comment,
+        .map((comment: any) => ({
+          id: comment.id,
+          entryId: comment.entryId || '',
+          content: comment.content || '',
+          authorId: comment.authorId || '',
+          authorEmail: comment.authorEmail || '',
+          authorName: comment.authorName,
+          parentId: comment.parentId,
+          replies: comment.replies || [],
+          isEdited: comment.isEdited || false,
+          editedAt: comment.editedAt?.toDate(),
+          likes: comment.likes || [],
+          dislikes: comment.dislikes || [],
           createdAt: comment.createdAt?.toDate() || new Date(),
           updatedAt: comment.updatedAt?.toDate() || new Date()
         }))
@@ -53,8 +64,8 @@ export function useComments() {
       return comments.value
     } catch (error) {
       console.error('Error en fetchComments:', error)
-      console.error('Error details:', error.message)
-      console.error('Error stack:', error.stack)
+      console.error('Error details:', (error as any).message)
+      console.error('Error stack:', (error as any).stack)
       throw error
     }
   }
@@ -97,7 +108,7 @@ export function useComments() {
           // Agregar información de a quién se está respondiendo
           commentWithReplies.replyingTo = {
             id: parent.id,
-            authorName: parent.authorName,
+            authorName: parent.authorName || '',
             authorEmail: parent.authorEmail
           }
           
@@ -185,7 +196,7 @@ export function useComments() {
             if (parentComment && parentComment.authorId !== user.value.uid) {
               // Obtener información de la entrada
               const entryDoc = await getDocument('entries', data.entryId)
-              const entryTitle = entryDoc?.title || 'Entrada sin título'
+              const entryTitle = (entryDoc as any)?.title || 'Entrada sin título'
               
               await createReplyNotification(
                 parentComment.authorId,
@@ -306,7 +317,7 @@ export function useComments() {
         try {
           // Obtener información de la entrada
           const entryDoc = await getDocument('entries', comment.entryId)
-          const entryTitle = entryDoc?.title || 'Entrada sin título'
+          const entryTitle = (entryDoc as any)?.title || 'Entrada sin título'
           
           await createLikeNotification(
             comment.authorId,
@@ -367,7 +378,7 @@ export function useComments() {
         try {
           // Obtener información de la entrada
           const entryDoc = await getDocument('entries', comment.entryId)
-          const entryTitle = entryDoc?.title || 'Entrada sin título'
+          const entryTitle = (entryDoc as any)?.title || 'Entrada sin título'
           
           await createDislikeNotification(
             comment.authorId,

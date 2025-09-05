@@ -26,16 +26,26 @@ export function useUserProfile() {
             const profile = await getDocument('userProfiles', user.uid);
             if (profile) {
                 userProfile.value = {
-                    ...profile,
-                    emailVerified: user.emailVerified
+                    id: profile.id,
+                    email: profile.email || '',
+                    displayName: profile.displayName,
+                    bio: profile.bio,
+                    avatar: profile.avatar,
+                    isAdmin: profile.isAdmin || false,
+                    emailVerified: user.emailVerified,
+                    createdAt: profile.createdAt?.toDate() || new Date(),
+                    updatedAt: profile.updatedAt?.toDate() || new Date()
                 };
             }
             else {
                 // Si no hay perfil, crear uno básico
                 userProfile.value = {
-                    uid: user.uid,
+                    id: user.uid,
                     displayName: user.displayName || '',
                     email: user.email || '',
+                    bio: '',
+                    avatar: user.photoURL || undefined,
+                    isAdmin: false,
                     emailVerified: user.emailVerified,
                     createdAt: new Date(),
                     updatedAt: new Date()
@@ -47,9 +57,12 @@ export function useUserProfile() {
             console.error('Error al cargar perfil de usuario:', error);
             // Crear un perfil básico en caso de error
             userProfile.value = {
-                uid: user.uid,
+                id: user.uid,
                 displayName: user.displayName || '',
                 email: user.email || '',
+                bio: '',
+                avatar: user.photoURL || undefined,
+                isAdmin: false,
                 emailVerified: user.emailVerified,
                 createdAt: new Date(),
                 updatedAt: new Date()
@@ -69,7 +82,11 @@ export function useUserProfile() {
             const result = await createOrUpdateUserProfile(auth.currentUser, profileData);
             if (result) {
                 userProfile.value = {
-                    ...userProfile.value,
+                    id: auth.currentUser.uid,
+                    email: auth.currentUser.email || '',
+                    isAdmin: userProfile.value?.isAdmin || false,
+                    createdAt: userProfile.value?.createdAt || new Date(),
+                    updatedAt: new Date(),
                     ...profileData,
                     emailVerified: auth.currentUser.emailVerified
                 };
@@ -105,9 +122,12 @@ export function useUserProfile() {
                 console.error('Error al crear/actualizar perfil de usuario:', err);
                 // Crear un perfil básico en caso de error
                 userProfile.value = {
-                    uid: currentUser.uid,
+                    id: currentUser.uid,
                     displayName: currentUser.displayName || '',
                     email: currentUser.email || '',
+                    bio: '',
+                    avatar: currentUser.photoURL || undefined,
+                    isAdmin: false,
                     emailVerified: currentUser.emailVerified,
                     createdAt: new Date(),
                     updatedAt: new Date()

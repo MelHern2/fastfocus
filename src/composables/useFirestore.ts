@@ -16,7 +16,9 @@ import {
   type DocumentData,
   type QuerySnapshot,
   type DocumentSnapshot,
-  type QueryDocumentSnapshot
+  type QueryDocumentSnapshot,
+  type Query,
+  type CollectionReference
 } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
@@ -45,7 +47,7 @@ export function useFirestore() {
     
     try {
       console.log('Creando colección...')
-      let q = collection(db, collectionName)
+      let q: Query<DocumentData> | CollectionReference<DocumentData> = collection(db, collectionName)
       console.log('Colección creada:', q)
       
       // Aplicar filtros
@@ -89,8 +91,8 @@ export function useFirestore() {
       return documents
     } catch (err) {
       console.error('Error en getCollection:', err)
-      console.error('Error details:', err.message)
-      console.error('Error stack:', err.stack)
+      console.error('Error details:', (err as any).message)
+      console.error('Error stack:', (err as any).stack)
       error.value = `Error al obtener documentos: ${err}`
       return []
     } finally {
@@ -194,7 +196,7 @@ export function useFirestore() {
     orderByField?: string,
     limitCount?: number
   ) => {
-    let q = collection(db, collectionName)
+    let q: Query<DocumentData> | CollectionReference<DocumentData> = collection(db, collectionName)
     
     if (conditions) {
       conditions.forEach(condition => {

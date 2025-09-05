@@ -30,7 +30,20 @@ const loadEntry = async () => {
         console.log('Datos de entrada obtenidos:', entryData);
         if (entryData) {
             entry.value = {
-                ...entryData,
+                id: entryData.id,
+                title: entryData.title || '',
+                content: entryData.content || '',
+                excerpt: entryData.excerpt || '',
+                mainImage: entryData.mainImage,
+                categoryId: entryData.categoryId || '',
+                categoryName: entryData.categoryName,
+                authorId: entryData.authorId || '',
+                authorEmail: entryData.authorEmail,
+                authorName: entryData.authorName,
+                published: entryData.published || false,
+                featured: entryData.featured || false,
+                tags: entryData.tags || [],
+                estimatedReadingTime: entryData.estimatedReadingTime || '5 min',
                 createdAt: entryData.createdAt?.toDate() || new Date(),
                 updatedAt: entryData.updatedAt?.toDate() || new Date(),
                 publishedAt: entryData.publishedAt?.toDate() || undefined

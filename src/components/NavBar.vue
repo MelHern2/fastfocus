@@ -72,13 +72,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, watch } from 'vue'
+import { ref, onMounted, computed, watch, onUnmounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuth } from '@/composables/useAuth'
 import { useAdmin } from '@/composables/useAdmin'
 import { useCategories } from '@/composables/useCategories'
 import NotificationBell from './NotificationBell.vue'
 import CategoryMenuItem from './CategoryMenuItem.vue'
+import type { CategoryTree } from '@/types/category'
 
 const route = useRoute()
 const { user, logout } = useAuth()
@@ -86,8 +87,9 @@ const { isAdmin } = useAdmin()
 const { categories, loading, fetchCategories, buildCategoryTree } = useCategories()
 
 const showDropdown = ref(false)
-const categoriesTree = ref([])
+const categoriesTree = ref<CategoryTree[]>([])
 const hoveredCategory = ref(null)
+let hoverTimeout: number | null = null
 
 // Detectar si estamos en la página de admin
 const isAdminPage = computed(() => {
@@ -116,6 +118,13 @@ const loadCategoriesTree = async () => {
 // Cargar categorías al montar el componente
 onMounted(async () => {
   await loadCategoriesTree()
+})
+
+// Limpiar timeout al desmontar
+onUnmounted(() => {
+  if (hoverTimeout) {
+    clearTimeout(hoverTimeout)
+  }
 })
 
 // Debug: verificar estado de admin

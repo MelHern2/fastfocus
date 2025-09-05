@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useEntries } from '@/composables/useEntries';
 import { useCategories } from '@/composables/useCategories';
@@ -7,44 +7,46 @@ const { fetchLatestEntries } = useEntries();
 const { categories, fetchCategories } = useCategories();
 const latestEntries = ref([]);
 const loading = ref(true);
-const loadingMore = ref(false);
-const hasMore = ref(true);
-const lastDoc = ref(null);
-const loadEntries = async (isLoadMore = false) => {
-    if (isLoadMore) {
-        loadingMore.value = true;
-    }
-    else {
-        loading.value = true;
-    }
+const currentPage = ref(1);
+const totalEntries = ref(0);
+const entriesPerPage = 4;
+const loadEntries = async (page = 1) => {
+    loading.value = true;
     try {
-        const entries = await fetchLatestEntries(4, isLoadMore ? lastDoc.value : undefined);
-        if (isLoadMore) {
-            latestEntries.value.push(...entries);
-        }
-        else {
-            latestEntries.value = entries;
-        }
-        // Verificar si hay más entradas
-        hasMore.value = entries.length === 4;
-        // Guardar el último documento para la siguiente página
-        if (entries.length > 0) {
-            lastDoc.value = entries[entries.length - 1].id;
-        }
+        // Calcular el offset para la paginación
+        const offset = (page - 1) * entriesPerPage;
+        // Obtener todas las entradas y luego paginar
+        const allEntries = await fetchLatestEntries(100); // Obtener muchas entradas
+        totalEntries.value = allEntries.length;
+        // Paginar las entradas
+        const startIndex = offset;
+        const endIndex = startIndex + entriesPerPage;
+        latestEntries.value = allEntries.slice(startIndex, endIndex);
+        currentPage.value = page;
     }
     catch (error) {
         console.error('Error al cargar entradas:', error);
-        // Mostrar mensaje de error al usuario
         latestEntries.value = [];
     }
     finally {
         loading.value = false;
-        loadingMore.value = false;
     }
 };
-const loadMore = () => {
-    if (!loadingMore.value && hasMore.value) {
-        loadEntries(true);
+const totalPages = computed(() => {
+    return Math.ceil(totalEntries.value / entriesPerPage);
+});
+const visiblePages = computed(() => {
+    const pages = [];
+    const start = Math.max(1, currentPage.value - 2);
+    const end = Math.min(totalPages.value, currentPage.value + 2);
+    for (let i = start; i <= end; i++) {
+        pages.push(i);
+    }
+    return pages;
+});
+const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages.value) {
+        loadEntries(page);
     }
 };
 const getCategoryName = (categoryId) => {
@@ -53,7 +55,7 @@ const getCategoryName = (categoryId) => {
 };
 onMounted(async () => {
     await fetchCategories();
-    await loadEntries();
+    await loadEntries(1);
 });
 const formatDate = (date) => {
     return new Intl.DateTimeFormat('es-ES', {
@@ -80,8 +82,10 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
-/** @type {__VLS_StyleScopedClasses['load-more-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['load-more-button']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-number']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-number']} */ ;
 /** @type {__VLS_StyleScopedClasses['entries-grid']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-title']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-image']} */ ;
@@ -215,29 +219,70 @@ else {
         });
     }
 }
-if (__VLS_ctx.hasMore && !__VLS_ctx.loading) {
+if (__VLS_ctx.totalPages > 1) {
     // @ts-ignore
-    [loading, hasMore,];
+    [totalPages,];
     __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
-        ...{ class: "load-more-section" },
+        ...{ class: "pagination-section" },
+    });
+    __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+        ...{ class: "pagination-info" },
+    });
+    (__VLS_ctx.currentPage);
+    (__VLS_ctx.totalPages);
+    (__VLS_ctx.totalEntries);
+    // @ts-ignore
+    [totalPages, currentPage, totalEntries,];
+    __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+        ...{ class: "pagination-controls" },
     });
     __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
-        ...{ onClick: (__VLS_ctx.loadMore) },
-        disabled: (__VLS_ctx.loadingMore),
-        ...{ class: "load-more-button" },
+        ...{ onClick: (...[$event]) => {
+                if (!(__VLS_ctx.totalPages > 1))
+                    return;
+                __VLS_ctx.goToPage(__VLS_ctx.currentPage - 1);
+                // @ts-ignore
+                [currentPage, goToPage,];
+            } },
+        disabled: (__VLS_ctx.currentPage <= 1),
+        ...{ class: "pagination-btn" },
     });
     // @ts-ignore
-    [loadMore, loadingMore,];
-    if (__VLS_ctx.loadingMore) {
+    [currentPage,];
+    __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+        ...{ class: "pagination-numbers" },
+    });
+    for (const [page] of __VLS_getVForSourceType((__VLS_ctx.visiblePages))) {
         // @ts-ignore
-        [loadingMore,];
-        __VLS_asFunctionalElement(__VLS_elements.span, __VLS_elements.span)({
-            ...{ class: "loading-spinner-small" },
+        [visiblePages,];
+        __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
+            ...{ onClick: (...[$event]) => {
+                    if (!(__VLS_ctx.totalPages > 1))
+                        return;
+                    __VLS_ctx.goToPage(page);
+                    // @ts-ignore
+                    [goToPage,];
+                } },
+            key: (page),
+            ...{ class: (['pagination-number', { active: page === __VLS_ctx.currentPage }]) },
         });
+        // @ts-ignore
+        [currentPage,];
+        (page);
     }
-    (__VLS_ctx.loadingMore ? 'Cargando...' : 'Cargar más entradas');
+    __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
+        ...{ onClick: (...[$event]) => {
+                if (!(__VLS_ctx.totalPages > 1))
+                    return;
+                __VLS_ctx.goToPage(__VLS_ctx.currentPage + 1);
+                // @ts-ignore
+                [currentPage, goToPage,];
+            } },
+        disabled: (__VLS_ctx.currentPage >= __VLS_ctx.totalPages),
+        ...{ class: "pagination-btn" },
+    });
     // @ts-ignore
-    [loadingMore,];
+    [totalPages, currentPage,];
 }
 /** @type {__VLS_StyleScopedClasses['home-page']} */ ;
 /** @type {__VLS_StyleScopedClasses['latest-entries-section']} */ ;
@@ -263,17 +308,24 @@ if (__VLS_ctx.hasMore && !__VLS_ctx.loading) {
 /** @type {__VLS_StyleScopedClasses['entry-tags']} */ ;
 /** @type {__VLS_StyleScopedClasses['tag']} */ ;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
-/** @type {__VLS_StyleScopedClasses['load-more-section']} */ ;
-/** @type {__VLS_StyleScopedClasses['load-more-button']} */ ;
-/** @type {__VLS_StyleScopedClasses['loading-spinner-small']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-section']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-info']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-controls']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-numbers']} */ ;
+/** @type {__VLS_StyleScopedClasses['active']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-number']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup: () => ({
         latestEntries: latestEntries,
         loading: loading,
-        loadingMore: loadingMore,
-        hasMore: hasMore,
-        loadMore: loadMore,
+        currentPage: currentPage,
+        totalEntries: totalEntries,
+        totalPages: totalPages,
+        visiblePages: visiblePages,
+        goToPage: goToPage,
         getCategoryName: getCategoryName,
         formatDate: formatDate,
         handleReadMore: handleReadMore,

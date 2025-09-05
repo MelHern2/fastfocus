@@ -42,7 +42,7 @@
             <span>{{ doc.email }}</span>
           </div>
           <div class="document-actions">
-            <button @click="deleteDocument(doc.id)" class="delete-btn">
+            <button @click="deleteDocument('test', doc.id)" class="delete-btn">
               Eliminar
             </button>
           </div>

@@ -34,7 +34,7 @@ export function useUserManagement() {
       const userData: CreateUserProfileData = {
         email: firebaseUser.email!,
         displayName: firebaseUser.displayName || 'Usuario',
-        avatar: firebaseUser.photoURL || null,
+        avatar: firebaseUser.photoURL || undefined,
         isAdmin: isAdminValue,
         emailVerified: firebaseUser.emailVerified,
         ...additionalData
@@ -61,7 +61,7 @@ export function useUserManagement() {
         console.log('Actualizando usuario existente...')
         const updateData: UpdateUserProfileData = {
           ...userData,
-          isAdmin: existingUser.isAdmin !== undefined ? existingUser.isAdmin : isAdminValue, // Mantener isAdmin existente
+          // isAdmin: existingUser.isAdmin !== undefined ? existingUser.isAdmin : isAdminValue, // Mantener isAdmin existente
           emailVerified: firebaseUser.emailVerified
         }
         console.log('Datos de actualización:', updateData)
@@ -98,9 +98,15 @@ export function useUserManagement() {
       const userProfile = await getDocument('userProfiles', userId)
       if (userProfile) {
         return {
-          ...userProfile,
-          createdAt: userProfile.createdAt?.toDate() || new Date(),
-          updatedAt: userProfile.updatedAt?.toDate() || new Date()
+          id: userProfile.id,
+          email: (userProfile as any).email || '',
+          displayName: (userProfile as any).displayName,
+          bio: (userProfile as any).bio,
+          avatar: (userProfile as any).avatar,
+          isAdmin: (userProfile as any).isAdmin || false,
+          emailVerified: (userProfile as any).emailVerified || false,
+          createdAt: (userProfile as any).createdAt?.toDate() || new Date(),
+          updatedAt: (userProfile as any).updatedAt?.toDate() || new Date()
         }
       }
       return null

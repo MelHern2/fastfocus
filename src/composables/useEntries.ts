@@ -30,8 +30,21 @@ export function useEntries() {
   // Obtener todas las entradas
   const fetchEntries = async () => {
     const result = await getCollection('entries')
-    entries.value = result.map(entry => ({
-      ...entry,
+    entries.value = result.map((entry: any) => ({
+      id: entry.id,
+      title: entry.title || '',
+      content: entry.content || '',
+      excerpt: entry.excerpt || '',
+      mainImage: entry.mainImage,
+      categoryId: entry.categoryId || '',
+      categoryName: entry.categoryName,
+      authorId: entry.authorId || '',
+      authorEmail: entry.authorEmail,
+      authorName: entry.authorName,
+      published: entry.published || false,
+      featured: entry.featured || false,
+      tags: entry.tags || [],
+      estimatedReadingTime: entry.estimatedReadingTime || '5 min',
       createdAt: entry.createdAt?.toDate() || new Date(),
       updatedAt: entry.updatedAt?.toDate() || new Date(),
       publishedAt: entry.publishedAt?.toDate() || undefined
@@ -50,7 +63,7 @@ export function useEntries() {
         if (entry.categoryId) {
           const categoryData = await getDocument('categories', entry.categoryId)
           if (categoryData) {
-            categoryName = categoryData.name
+            categoryName = (categoryData as any).name
           }
         }
         
@@ -90,8 +103,18 @@ export function useEntries() {
       // Obtener todas las entradas ordenadas por fecha de creación
       const result = await getCollection('entries', undefined, 'createdAt', 'desc', limit, lastDoc)
       
-      const latestEntries = result.map(entry => ({
-        ...entry,
+      const latestEntries = result.map((entry: any) => ({
+        id: entry.id,
+        title: entry.title || '',
+        content: entry.content || '',
+        excerpt: entry.excerpt || '',
+        mainImage: entry.mainImage,
+        categoryId: entry.categoryId || '',
+        categoryName: entry.categoryName,
+        authorId: entry.authorId || '',
+        authorEmail: entry.authorEmail,
+        authorName: entry.authorName,
+        published: entry.published || false,
         createdAt: entry.createdAt?.toDate() || new Date(),
         updatedAt: entry.updatedAt?.toDate() || new Date(),
         publishedAt: entry.publishedAt?.toDate() || undefined
@@ -200,8 +223,21 @@ export function useEntries() {
       ['categoryId', '==', categoryId],
       ['published', '==', true]
     ])
-    return result.map(entry => ({
-      ...entry,
+    return result.map((entry: any) => ({
+      id: entry.id,
+      title: entry.title || '',
+      content: entry.content || '',
+      excerpt: entry.excerpt || '',
+      mainImage: entry.mainImage,
+      categoryId: entry.categoryId || '',
+      categoryName: entry.categoryName,
+      authorId: entry.authorId || '',
+      authorEmail: entry.authorEmail,
+      authorName: entry.authorName,
+      published: entry.published || false,
+      featured: entry.featured || false,
+      tags: entry.tags || [],
+      estimatedReadingTime: entry.estimatedReadingTime || '5 min',
       createdAt: entry.createdAt?.toDate() || new Date(),
       updatedAt: entry.updatedAt?.toDate() || new Date(),
       publishedAt: entry.publishedAt?.toDate() || undefined
@@ -219,7 +255,7 @@ export function useEntries() {
       }))
       entries.value = entriesData
       callback(entriesData)
-    }, undefined, 'createdAt', 'desc')
+    }, undefined, 'createdAt')
   }
   
   return {

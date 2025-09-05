@@ -9,6 +9,8 @@ const { fetchEntriesByCategory } = useEntries();
 const loading = ref(true);
 const entriesLoading = ref(true);
 const entries = ref([]);
+const currentPage = ref(1);
+const entriesPerPage = 4;
 const categoryId = computed(() => route.params.id);
 const category = computed(() => {
     return categories.value.find(cat => cat.id === categoryId.value);
@@ -57,6 +59,28 @@ const getCategoryName = (categoryId) => {
     const cat = categories.value.find(c => c.id === categoryId);
     return cat ? cat.name : 'Sin categoría';
 };
+const totalPages = computed(() => {
+    return Math.ceil(entries.value.length / entriesPerPage);
+});
+const visiblePages = computed(() => {
+    const pages = [];
+    const start = Math.max(1, currentPage.value - 2);
+    const end = Math.min(totalPages.value, currentPage.value + 2);
+    for (let i = start; i <= end; i++) {
+        pages.push(i);
+    }
+    return pages;
+});
+const paginatedEntries = computed(() => {
+    const startIndex = (currentPage.value - 1) * entriesPerPage;
+    const endIndex = startIndex + entriesPerPage;
+    return entries.value.slice(startIndex, endIndex);
+});
+const goToPage = (page) => {
+    if (page >= 1 && page <= totalPages.value) {
+        currentPage.value = page;
+    }
+};
 onMounted(async () => {
     await loadCategoryData();
     await loadEntries();
@@ -64,6 +88,7 @@ onMounted(async () => {
 // Escuchar cambios en la ruta
 watch(() => route.params.id, async (newId) => {
     if (newId) {
+        currentPage.value = 1; // Resetear a la primera página
         await loadEntries();
     }
 });
@@ -78,7 +103,13 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['empty-state']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-main-image']} */ ;
+/** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn-primary']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-view']} */ ;
@@ -89,6 +120,10 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['entry-content']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-footer']} */ ;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-number']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-number']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
@@ -209,9 +244,9 @@ else {
         __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
             ...{ class: "entries-grid" },
         });
-        for (const [entry] of __VLS_getVForSourceType((__VLS_ctx.entries))) {
+        for (const [entry] of __VLS_getVForSourceType((__VLS_ctx.paginatedEntries))) {
             // @ts-ignore
-            [entries,];
+            [paginatedEntries,];
             __VLS_asFunctionalElement(__VLS_elements.article, __VLS_elements.article)({
                 key: (entry.id),
                 ...{ class: "entry-card" },
@@ -304,6 +339,83 @@ else {
             });
         }
     }
+    if (__VLS_ctx.totalPages > 1) {
+        // @ts-ignore
+        [totalPages,];
+        __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+            ...{ class: "pagination-section" },
+        });
+        __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+            ...{ class: "pagination-info" },
+        });
+        (__VLS_ctx.currentPage);
+        (__VLS_ctx.totalPages);
+        (__VLS_ctx.entries.length);
+        // @ts-ignore
+        [entries, totalPages, currentPage,];
+        __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+            ...{ class: "pagination-controls" },
+        });
+        __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
+            ...{ onClick: (...[$event]) => {
+                    if (!!(__VLS_ctx.loading))
+                        return;
+                    if (!!(!__VLS_ctx.category))
+                        return;
+                    if (!(__VLS_ctx.totalPages > 1))
+                        return;
+                    __VLS_ctx.goToPage(__VLS_ctx.currentPage - 1);
+                    // @ts-ignore
+                    [currentPage, goToPage,];
+                } },
+            disabled: (__VLS_ctx.currentPage <= 1),
+            ...{ class: "pagination-btn" },
+        });
+        // @ts-ignore
+        [currentPage,];
+        __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+            ...{ class: "pagination-numbers" },
+        });
+        for (const [page] of __VLS_getVForSourceType((__VLS_ctx.visiblePages))) {
+            // @ts-ignore
+            [visiblePages,];
+            __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
+                ...{ onClick: (...[$event]) => {
+                        if (!!(__VLS_ctx.loading))
+                            return;
+                        if (!!(!__VLS_ctx.category))
+                            return;
+                        if (!(__VLS_ctx.totalPages > 1))
+                            return;
+                        __VLS_ctx.goToPage(page);
+                        // @ts-ignore
+                        [goToPage,];
+                    } },
+                key: (page),
+                ...{ class: (['pagination-number', { active: page === __VLS_ctx.currentPage }]) },
+            });
+            // @ts-ignore
+            [currentPage,];
+            (page);
+        }
+        __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
+            ...{ onClick: (...[$event]) => {
+                    if (!!(__VLS_ctx.loading))
+                        return;
+                    if (!!(!__VLS_ctx.category))
+                        return;
+                    if (!(__VLS_ctx.totalPages > 1))
+                        return;
+                    __VLS_ctx.goToPage(__VLS_ctx.currentPage + 1);
+                    // @ts-ignore
+                    [currentPage, goToPage,];
+                } },
+            disabled: (__VLS_ctx.currentPage >= __VLS_ctx.totalPages),
+            ...{ class: "pagination-btn" },
+        });
+        // @ts-ignore
+        [totalPages, currentPage,];
+    }
 }
 /** @type {__VLS_StyleScopedClasses['category-view']} */ ;
 /** @type {__VLS_StyleScopedClasses['loading-state']} */ ;
@@ -343,16 +455,29 @@ else {
 /** @type {__VLS_StyleScopedClasses['entry-tags']} */ ;
 /** @type {__VLS_StyleScopedClasses['tag']} */ ;
 /** @type {__VLS_StyleScopedClasses['read-more-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-section']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-info']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-controls']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-numbers']} */ ;
+/** @type {__VLS_StyleScopedClasses['active']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-number']} */ ;
+/** @type {__VLS_StyleScopedClasses['pagination-btn']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup: () => ({
         loading: loading,
         entriesLoading: entriesLoading,
         entries: entries,
+        currentPage: currentPage,
         category: category,
         formatDate: formatDate,
         handleReadMore: handleReadMore,
         getCategoryName: getCategoryName,
+        totalPages: totalPages,
+        visiblePages: visiblePages,
+        paginatedEntries: paginatedEntries,
+        goToPage: goToPage,
     }),
 });
 export default (await import('vue')).defineComponent({});

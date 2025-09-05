@@ -19,7 +19,7 @@ export function useAdmin() {
       loading.value = true
       try {
         const profile = await getUserProfile(newUser.uid)
-        userProfile.value = profile
+        userProfile.value = profile as any
         console.log('useAdmin - Perfil cargado:', profile)
         console.log('useAdmin - Email del usuario:', newUser.email)
         console.log('useAdmin - Email admin esperado:', ADMIN_EMAIL)
@@ -64,7 +64,7 @@ export function useAdmin() {
     }
     
     // Verificar por perfil de Firestore como fallback
-    const profileCheck = userProfile.value?.isAdmin === true
+    const profileCheck = (userProfile.value as any)?.isAdmin === true
     console.log('useAdmin - Verificación por perfil:', {
       userProfile: userProfile.value,
       profileCheck
