@@ -75,9 +75,13 @@ const handleDeleteCategory = async (category) => {
     if (confirmed) {
         try {
             await deleteCategory(category.id);
+            // Recargar la lista de categorías después de eliminar
+            await fetchCategories();
+            success('Categoría eliminada correctamente');
         }
         catch (err) {
             console.error('Error al eliminar categoría:', err);
+            showError('Error al eliminar la categoría');
         }
     }
 };
@@ -93,9 +97,13 @@ const handleDeleteEntry = async (entry) => {
     if (confirmed) {
         try {
             await deleteEntry(entry.id);
+            // Recargar la lista de entradas después de eliminar
+            await fetchEntriesWithCategories();
+            success('Entrada eliminada correctamente');
         }
         catch (err) {
             console.error('Error al eliminar entrada:', err);
+            showError('Error al eliminar la entrada');
         }
     }
 };

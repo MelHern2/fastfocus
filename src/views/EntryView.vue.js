@@ -202,8 +202,10 @@ const handleSubmit = async () => {
 };
 onMounted(async () => {
     console.log('EntryView onMounted iniciado');
+    // Cargar categorías PRIMERO
     await fetchCategories();
-    // Cargar entrada PRIMERO si estamos editando
+    console.log('Categorías cargadas:', categories.value.length);
+    // Cargar entrada si estamos editando
     if (isEditing.value) {
         await loadEntry();
     }

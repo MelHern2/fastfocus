@@ -115,6 +115,9 @@ export function useEntries() {
         authorEmail: entry.authorEmail,
         authorName: entry.authorName,
         published: entry.published || false,
+        featured: entry.featured || false,
+        tags: entry.tags || [],
+        estimatedReadingTime: entry.estimatedReadingTime || '5 min',
         createdAt: entry.createdAt?.toDate() || new Date(),
         updatedAt: entry.updatedAt?.toDate() || new Date(),
         publishedAt: entry.publishedAt?.toDate() || undefined
@@ -144,6 +147,7 @@ export function useEntries() {
       published: data.published,
       featured: data.featured,
       tags: data.tags || [],
+      estimatedReadingTime: data.estimatedReadingTime || 'Tiempo de lectura no estimado',
       createdAt: new Date(),
       updatedAt: new Date()
     }
@@ -172,6 +176,7 @@ export function useEntries() {
       published: data.published,
       featured: data.featured,
       tags: data.tags || [],
+      estimatedReadingTime: data.estimatedReadingTime || 'Tiempo de lectura no estimado',
       updatedAt: new Date()
     }
     

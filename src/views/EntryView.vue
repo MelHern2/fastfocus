@@ -42,8 +42,11 @@
                   v-model="formData.categoryId"
                   required
                   class="form-select"
+                  :disabled="categories.length === 0"
                 >
-                  <option value="">Selecciona una categoría</option>
+                  <option value="">
+                    {{ categories.length === 0 ? 'Cargando categorías...' : 'Selecciona una categoría' }}
+                  </option>
                   <option 
                     v-for="category in categoriesWithHierarchy" 
                     :key="category.id" 
@@ -264,6 +267,7 @@ const initSummernote = () => {
 
 // Crear jerarquía de categorías para el select
 const categoriesWithHierarchy = computed(() => {
+  console.log('Computing categoriesWithHierarchy, categories:', categories.value.length)
   const tree = buildCategoryTree()
   const result: Array<{id: string, displayName: string, disabled: boolean}> = []
   
@@ -283,6 +287,7 @@ const categoriesWithHierarchy = computed(() => {
   }
   
   addCategories(tree)
+  console.log('CategoriesWithHierarchy result:', result.length)
   return result
 })
 
@@ -416,9 +421,12 @@ const handleSubmit = async () => {
 
 onMounted(async () => {
   console.log('EntryView onMounted iniciado')
-  await fetchCategories()
   
-  // Cargar entrada PRIMERO si estamos editando
+  // Cargar categorías PRIMERO
+  await fetchCategories()
+  console.log('Categorías cargadas:', categories.value.length)
+  
+  // Cargar entrada si estamos editando
   if (isEditing.value) {
     await loadEntry()
   }
