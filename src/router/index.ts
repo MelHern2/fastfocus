@@ -55,6 +55,16 @@ const router = createRouter({
       name: 'category',
       component: () => import('../views/CategoryView.vue')
     },
+    {
+      path: '/profile',
+      name: 'profile',
+      component: () => import('../views/ProfileView.vue')
+    },
+    {
+      path: '/notifications',
+      name: 'notifications',
+      component: () => import('../views/NotificationsView.vue')
+    },
   ],
 })
 

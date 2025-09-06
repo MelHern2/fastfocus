@@ -78,3 +78,4 @@
 - Puedes eliminar las reglas cuando no uses la aplicación
 - Si sigues teniendo problemas, considera usar un navegador diferente para desarrollo
 
+
