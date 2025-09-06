@@ -1,5 +1,5 @@
 <template>
-  <div class="comment-item" :id="`comment-${comment.id}`" :class="{ 'is-reply': comment.parentId, 'is-being-replied-to': isReplyingToThis }" :data-comment-id="comment.id">
+  <div class="comment-item" :id="`comment-${comment.id}`" :class="{ 'is-reply': comment.parentId && !isNested, 'is-nested-reply': comment.parentId && isNested, 'is-being-replied-to': isReplyingToThis }" :data-comment-id="comment.id">
     <div class="comment-content">
       <div class="comment-header">
         <div class="comment-author">
@@ -140,26 +140,11 @@
       </form>
     </div>
 
-         <!-- Respuestas -->
-     <div v-if="comment.replies && comment.replies.length > 0" class="comment-replies">
+         <!-- Respuestas - Solo mostrar contador -->
+     <div v-if="comment.replyCount > 0" class="comment-replies">
       <div class="replies-indicator">
         <span class="replies-line"></span>
         <span class="replies-text">{{ comment.replyCount }} respuesta{{ comment.replyCount !== 1 ? 's' : '' }}</span>
-      </div>
-      
-      <div class="replies-list">
-                 <CommentItem
-           v-for="reply in comment.replies"
-           :key="reply.id"
-           :comment="reply"
-           :entry-id="entryId"
-           :is-nested="true"
-           @reply="handleNestedReply"
-           @edit="$emit('edit', $event)"
-           @delete="$emit('delete', $event)"
-           @like="$emit('like', $event)"
-           @dislike="$emit('dislike', $event)"
-         />
       </div>
     </div>
   </div>
@@ -277,17 +262,8 @@ const formatDate = (date: Date) => {
 }
 
 .comment-item.is-reply {
-  margin-left: 2rem;
+  margin-left: 1.5rem;
   border-left: 3px solid #667eea;
-}
-
-/* Las respuestas de respuestas se muestran al mismo nivel */
-.comment-item.is-reply .comment-item.is-reply {
-  margin-left: 0;
-  border-left: none;
-  border-top: 2px solid #e5e7eb;
-  margin-top: 0.5rem;
-  padding-top: 0.5rem;
 }
 
 .comment-item.is-being-replied-to {
@@ -497,9 +473,9 @@ const formatDate = (date: Date) => {
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  margin-left: 2rem;
-  border-left: 2px solid #e5e7eb;
-  padding-left: 1rem;
+  margin-left: 0;
+  border-left: none;
+  padding-left: 0;
 }
 
 /* Las respuestas de respuestas NO se indentan más */
@@ -512,20 +488,6 @@ const formatDate = (date: Date) => {
 /* Estilos para comentarios que son respuestas */
 .comment-item.is-reply {
   background: #f8fafc;
-  border-left: 3px solid #667eea;
-  margin-left: 0;
-}
-
-/* Asegurar que las respuestas de respuestas NO se indentan más */
-.replies-list .comment-item.is-reply {
-  margin-left: 0 !important;
-  background: #f8fafc;
-  border-left: 3px solid #667eea;
-}
-
-/* Solo las respuestas directas (no anidadas) se indentan */
-.comment-replies > .replies-list > .comment-item.is-reply {
-  margin-left: 0;
 }
 
 /* Formulario de respuesta inline */
@@ -631,8 +593,8 @@ const formatDate = (date: Date) => {
   }
   
   .replies-list {
-    margin-left: 1rem;
-    padding-left: 0.5rem;
+    margin-left: 0;
+    padding-left: 0;
   }
   
   .replies-list .replies-list {

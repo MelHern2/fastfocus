@@ -110,7 +110,7 @@ const handleMouseLeave = () => {
 }
 
 .dropdown-item-level-1::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 0.75rem;
   color: var(--gray-400);
@@ -124,7 +124,7 @@ const handleMouseLeave = () => {
 }
 
 .dropdown-item-level-2::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 1.75rem;
   color: var(--gray-400);
@@ -138,7 +138,7 @@ const handleMouseLeave = () => {
 }
 
 .dropdown-item-level-3::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 2.75rem;
   color: var(--gray-400);
@@ -152,7 +152,7 @@ const handleMouseLeave = () => {
 }
 
 .dropdown-item-level-4::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 3.75rem;
   color: var(--gray-400);
@@ -166,7 +166,7 @@ const handleMouseLeave = () => {
 }
 
 .dropdown-item-level-5::before {
-  content: '—';
+  content: '';
   position: absolute;
   left: 4.75rem;
   color: var(--gray-400);

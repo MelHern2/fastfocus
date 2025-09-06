@@ -53,6 +53,8 @@ const formatDate = (date) => {
     }).format(date);
 };
 const handleReadMore = (entryId) => {
+    console.log('handleReadMore llamado con ID:', entryId);
+    console.log('Navegando a:', `/entry/${entryId}`);
     router.push(`/entry/${entryId}`);
 };
 const getCategoryName = (categoryId) => {
@@ -322,21 +324,11 @@ else {
                 }
             }
             __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
-                ...{ onClick: (...[$event]) => {
-                        if (!!(__VLS_ctx.loading))
-                            return;
-                        if (!!(!__VLS_ctx.category))
-                            return;
-                        if (!!(__VLS_ctx.entriesLoading))
-                            return;
-                        if (!!(__VLS_ctx.entries.length === 0))
-                            return;
-                        __VLS_ctx.handleReadMore(entry.id);
-                        // @ts-ignore
-                        [handleReadMore,];
-                    } },
+                ...{ onClick: (() => __VLS_ctx.router.push(`/entry/${entry.id}`)) },
                 ...{ class: "read-more-btn" },
             });
+            // @ts-ignore
+            [router,];
         }
     }
     if (__VLS_ctx.totalPages > 1) {
@@ -466,13 +458,13 @@ else {
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup: () => ({
+        router: router,
         loading: loading,
         entriesLoading: entriesLoading,
         entries: entries,
         currentPage: currentPage,
         category: category,
         formatDate: formatDate,
-        handleReadMore: handleReadMore,
         getCategoryName: getCategoryName,
         totalPages: totalPages,
         visiblePages: visiblePages,

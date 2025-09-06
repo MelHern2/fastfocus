@@ -27,8 +27,103 @@
         </p>
       </div>
 
+      <!-- Buscador -->
+      <div class="search-section">
+        <div class="search-container">
+          <div class="search-box">
+            <input
+              v-model="searchQuery"
+              @keyup="handleSearchKeyup"
+              type="text"
+              :placeholder="`Buscar en ${category.name}...`"
+              class="search-input"
+            />
+            <button 
+              @click="performSearch"
+              :disabled="isSearching || !searchQuery.trim()"
+              class="search-btn"
+            >
+              <span v-if="isSearching" class="search-spinner">⟳</span>
+              <span v-else>🔍</span>
+            </button>
+            <button 
+              v-if="searchQuery"
+              @click="clearSearch"
+              class="clear-btn"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Resultados de búsqueda -->
+      <div v-if="showSearchResults" class="search-results-section">
+        <div class="search-results-header">
+          <h2>Resultados de búsqueda en {{ category.name }}</h2>
+          <p v-if="searchResults.length === 0" class="no-results">
+            No se encontraron entradas que coincidan con "{{ searchQuery }}" en esta categoría
+          </p>
+          <p v-else class="results-count">
+            {{ searchResults.length }} resultado{{ searchResults.length !== 1 ? 's' : '' }} encontrado{{ searchResults.length !== 1 ? 's' : '' }}
+          </p>
+        </div>
+        
+        <div v-if="searchResults.length > 0" class="entries-grid">
+          <article 
+            v-for="entry in searchResults" 
+            :key="entry.id" 
+            class="entry-card"
+          >
+            <div class="entry-image">
+              <img 
+                v-if="entry.mainImage" 
+                :src="entry.mainImage" 
+                :alt="entry.title"
+                class="entry-main-image"
+              />
+              <div v-else class="entry-image-placeholder">
+                <span class="entry-icon">📝</span>
+              </div>
+            </div>
+            
+            <div class="entry-content">
+              <div class="entry-header">
+                <h3 class="entry-title">{{ entry.title }}</h3>
+                <div class="entry-meta">
+                  <time class="entry-date">{{ formatDate(entry.createdAt) }}</time>
+                  <span v-if="entry.featured" class="featured-badge">⭐</span>
+                </div>
+                <div class="entry-category">
+                  <span class="category-badge">{{ category.name }}</span>
+                </div>
+              </div>
+
+              <p class="entry-excerpt">{{ entry.excerpt }}</p>
+
+              <div class="entry-footer">
+                <div class="entry-tags" v-if="entry.tags && entry.tags.length > 0">
+                  <span 
+                    v-for="tag in entry.tags.slice(0, 2)" 
+                    :key="tag" 
+                    class="tag"
+                  >
+                    #{{ tag }}
+                  </span>
+                </div>
+                
+                <div class="entry-actions">
+                  <span class="reading-time">{{ entry.estimatedReadingTime }}</span>
+                  <button @click="() => router.push(`/entry/${entry.id}`)" class="read-more-btn">Leer más</button>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+
       <!-- Entradas de la categoría -->
-      <div class="entries-section">
+      <div v-if="!showSearchResults" class="entries-section">
         <div v-if="entriesLoading" class="loading-state">
           <div class="loading-spinner"></div>
           <p>Cargando entradas...</p>
@@ -79,10 +174,14 @@
                     :key="tag" 
                     class="tag"
                   >
-                    {{ tag }}
+                    #{{ tag }}
                   </span>
                 </div>
-                <button @click="handleReadMore(entry.id)" class="read-more-btn">Leer más</button>
+                
+                <div class="entry-actions">
+                  <span class="reading-time">{{ entry.estimatedReadingTime }}</span>
+                  <button @click="() => router.push(`/entry/${entry.id}`)" class="read-more-btn">Leer más</button>
+                </div>
               </div>
             </div>
           </article>
@@ -132,19 +231,26 @@ import { ref, onMounted, computed, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useCategories } from '@/composables/useCategories'
 import { useEntries } from '@/composables/useEntries'
+import { useFirestore } from '@/composables/useFirestore'
 import type { Category } from '@/types/category'
 import type { Entry } from '@/types/entry'
 
 const route = useRoute()
 const router = useRouter()
 const { categories, fetchCategories } = useCategories()
-const { fetchEntriesByCategory } = useEntries()
+const { fetchEntriesByCategory, entries: allEntries } = useEntries()
 
 const loading = ref(true)
 const entriesLoading = ref(true)
 const entries = ref<Entry[]>([])
 const currentPage = ref(1)
 const entriesPerPage = 4
+
+// Buscador
+const searchQuery = ref('')
+const searchResults = ref<Entry[]>([])
+const isSearching = ref(false)
+const showSearchResults = ref(false)
 
 const categoryId = computed(() => route.params.id as string)
 
@@ -189,6 +295,8 @@ const formatDate = (date: Date) => {
 }
 
 const handleReadMore = (entryId: string) => {
+  console.log('handleReadMore llamado con ID:', entryId)
+  console.log('Navegando a:', `/entry/${entryId}`)
   router.push(`/entry/${entryId}`)
 }
 
@@ -221,6 +329,69 @@ const paginatedEntries = computed(() => {
 const goToPage = (page: number) => {
   if (page >= 1 && page <= totalPages.value) {
     currentPage.value = page
+  }
+}
+
+// Funciones de búsqueda específicas para categorías
+const performSearch = async () => {
+  if (!searchQuery.value.trim()) {
+    showSearchResults.value = false
+    return
+  }
+
+  isSearching.value = true
+  try {
+    // Obtener entradas de la categoría específica directamente de Firestore
+    const { getCollection } = useFirestore()
+    const categoryEntries = await getCollection('entries', [
+      ['categoryId', '==', categoryId.value],
+      ['published', '==', true]
+    ])
+    
+    const query = searchQuery.value.toLowerCase().trim()
+    searchResults.value = categoryEntries.filter((entry: any) => 
+      entry.title?.toLowerCase().includes(query) ||
+      entry.excerpt?.toLowerCase().includes(query) ||
+      entry.content?.toLowerCase().includes(query)
+    ).map((entry: any) => ({
+      id: entry.id,
+      title: entry.title || '',
+      content: entry.content || '',
+      excerpt: entry.excerpt || '',
+      mainImage: entry.mainImage,
+      categoryId: entry.categoryId || '',
+      categoryName: entry.categoryName,
+      authorId: entry.authorId || '',
+      authorEmail: entry.authorEmail,
+      authorName: entry.authorName,
+      published: entry.published || false,
+      featured: entry.featured || false,
+      tags: entry.tags || [],
+      estimatedReadingTime: entry.estimatedReadingTime || '5 min',
+      createdAt: entry.createdAt?.toDate() || new Date(),
+      updatedAt: entry.updatedAt?.toDate() || new Date(),
+      publishedAt: entry.publishedAt?.toDate() || undefined
+    }))
+    
+    showSearchResults.value = true
+    console.log('Búsqueda en categoría realizada:', { query, categoryId: categoryId.value, results: searchResults.value.length })
+  } catch (error) {
+    console.error('Error en la búsqueda:', error)
+    searchResults.value = []
+  } finally {
+    isSearching.value = false
+  }
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  searchResults.value = []
+  showSearchResults.value = false
+}
+
+const handleSearchKeyup = (event: KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    performSearch()
   }
 }
 
@@ -343,6 +514,116 @@ watch(() => route.params.id, async (newId) => {
   margin: 0 auto;
 }
 
+/* Estilos del buscador */
+.search-section {
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  border-radius: var(--border-radius-xl);
+  border: 2px solid var(--gray-200);
+}
+
+.search-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--gray-200);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  background: transparent;
+  color: var(--gray-800);
+}
+
+.search-input::placeholder {
+  color: var(--gray-500);
+}
+
+.search-btn {
+  padding: 1rem 1.5rem;
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.search-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  padding: 1rem;
+  background: var(--gray-200);
+  border: none;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.clear-btn:hover {
+  background: var(--gray-300);
+  color: var(--gray-800);
+}
+
+.search-spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Estilos de resultados de búsqueda */
+.search-results-section {
+  margin-bottom: 3rem;
+}
+
+.search-results-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.search-results-header h2 {
+  color: var(--gray-800);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.results-count {
+  color: var(--gray-600);
+  font-size: 1.1rem;
+}
+
+.no-results {
+  color: var(--gray-500);
+  font-style: italic;
+}
+
 .entries-section {
   padding: 2rem;
 }
@@ -366,7 +647,7 @@ watch(() => route.params.id, async (newId) => {
 
 .entries-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(2, 1fr);
   gap: 2rem;
   margin-bottom: 2rem;
 }
@@ -543,6 +824,19 @@ watch(() => route.params.id, async (newId) => {
   font-weight: 500;
 }
 
+.entry-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.reading-time {
+  color: var(--gray-600);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 .read-more-btn {
   background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%);
   color: white;
@@ -555,6 +849,11 @@ watch(() => route.params.id, async (newId) => {
   box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
   position: relative;
   overflow: hidden;
+  text-decoration: none;
+  display: inline-block;
+  text-align: center;
+  z-index: 10;
+  pointer-events: auto;
 }
 
 .read-more-btn::before {
@@ -600,7 +899,22 @@ watch(() => route.params.id, async (newId) => {
   box-shadow: var(--shadow-md);
 }
 
-/* Responsive */
+/* Responsive Design */
+@media (min-width: 992px) {
+  .entries-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+  
+  .entry-title {
+    font-size: 1.4rem;
+  }
+  
+  .entry-image {
+    height: 220px;
+  }
+}
+
 @media (max-width: 768px) {
   .category-view {
     padding: 1rem;

@@ -3,16 +3,23 @@ import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useEntries } from '@/composables/useEntries'
 import { useCategories } from '@/composables/useCategories'
+import { useFirestore } from '@/composables/useFirestore'
 import type { Entry } from '@/types/entry'
 
 const router = useRouter()
-const { fetchLatestEntries } = useEntries()
+const { fetchLatestEntries, fetchEntries, entries } = useEntries()
 const { categories, fetchCategories } = useCategories()
 const latestEntries = ref<Entry[]>([])
 const loading = ref(true)
 const currentPage = ref(1)
 const totalEntries = ref(0)
 const entriesPerPage = 4
+
+// Buscador
+const searchQuery = ref('')
+const searchResults = ref<Entry[]>([])
+const isSearching = ref(false)
+const showSearchResults = ref(false)
 
 const loadEntries = async (page = 1) => {
   loading.value = true
@@ -60,6 +67,66 @@ const goToPage = (page: number) => {
   }
 }
 
+// Funciones de búsqueda
+const performSearch = async () => {
+  if (!searchQuery.value.trim()) {
+    showSearchResults.value = false
+    return
+  }
+
+  isSearching.value = true
+  try {
+    // Obtener todas las entradas directamente de Firestore
+    const { getCollection } = useFirestore()
+    const allEntries = await getCollection('entries')
+    
+    const query = searchQuery.value.toLowerCase().trim()
+    searchResults.value = allEntries.filter((entry: any) => 
+      entry.title?.toLowerCase().includes(query) ||
+      entry.excerpt?.toLowerCase().includes(query) ||
+      entry.content?.toLowerCase().includes(query)
+    ).map((entry: any) => ({
+      id: entry.id,
+      title: entry.title || '',
+      content: entry.content || '',
+      excerpt: entry.excerpt || '',
+      mainImage: entry.mainImage,
+      categoryId: entry.categoryId || '',
+      categoryName: entry.categoryName,
+      authorId: entry.authorId || '',
+      authorEmail: entry.authorEmail,
+      authorName: entry.authorName,
+      published: entry.published || false,
+      featured: entry.featured || false,
+      tags: entry.tags || [],
+      estimatedReadingTime: entry.estimatedReadingTime || '5 min',
+      createdAt: entry.createdAt?.toDate() || new Date(),
+      updatedAt: entry.updatedAt?.toDate() || new Date(),
+      publishedAt: entry.publishedAt?.toDate() || undefined
+    }))
+    
+    showSearchResults.value = true
+    console.log('Búsqueda realizada:', { query, results: searchResults.value.length })
+  } catch (error) {
+    console.error('Error en la búsqueda:', error)
+    searchResults.value = []
+  } finally {
+    isSearching.value = false
+  }
+}
+
+const clearSearch = () => {
+  searchQuery.value = ''
+  searchResults.value = []
+  showSearchResults.value = false
+}
+
+const handleSearchKeyup = (event: KeyboardEvent) => {
+  if (event.key === 'Enter') {
+    performSearch()
+  }
+}
+
 const getCategoryName = (categoryId: string) => {
   const cat = categories.value.find(c => c.id === categoryId)
   return cat ? cat.name : 'Sin categoría'
@@ -87,9 +154,103 @@ const handleReadMore = (entryId: string) => {
 
 <template>
   <div class="home-page">
+    <!-- Buscador -->
+    <div class="search-section">
+      <div class="search-container">
+        <div class="search-box">
+          <input
+            v-model="searchQuery"
+            @keyup="handleSearchKeyup"
+            type="text"
+            placeholder="Buscar entradas..."
+            class="search-input"
+          />
+          <button 
+            @click="performSearch"
+            :disabled="isSearching || !searchQuery.trim()"
+            class="search-btn"
+          >
+            <span v-if="isSearching" class="search-spinner">⟳</span>
+            <span v-else>🔍</span>
+          </button>
+          <button 
+            v-if="searchQuery"
+            @click="clearSearch"
+            class="clear-btn"
+          >
+            ✕
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Resultados de búsqueda -->
+    <div v-if="showSearchResults" class="search-results-section">
+      <div class="search-results-header">
+        <h2>Resultados de búsqueda</h2>
+        <p v-if="searchResults.length === 0" class="no-results">
+          No se encontraron entradas que coincidan con "{{ searchQuery }}"
+        </p>
+        <p v-else class="results-count">
+          {{ searchResults.length }} resultado{{ searchResults.length !== 1 ? 's' : '' }} encontrado{{ searchResults.length !== 1 ? 's' : '' }}
+        </p>
+      </div>
+      
+      <div v-if="searchResults.length > 0" class="entries-grid">
+        <article 
+          v-for="entry in searchResults" 
+          :key="entry.id" 
+          class="entry-card"
+        >
+          <div class="entry-image">
+            <img 
+              v-if="entry.mainImage" 
+              :src="entry.mainImage" 
+              :alt="entry.title"
+              class="entry-main-image"
+            />
+            <div v-else class="entry-image-placeholder">
+              <span class="entry-icon">📝</span>
+            </div>
+          </div>
+          
+          <div class="entry-content">
+            <div class="entry-header">
+              <h3 class="entry-title">{{ entry.title }}</h3>
+              <div class="entry-meta">
+                <time class="entry-date">{{ formatDate(entry.createdAt) }}</time>
+                <span v-if="entry.featured" class="featured-badge">⭐</span>
+              </div>
+              <div class="entry-category">
+                <span class="category-badge">{{ getCategoryName(entry.categoryId) }}</span>
+              </div>
+            </div>
+
+            <p class="entry-excerpt">{{ entry.excerpt }}</p>
+
+            <div class="entry-footer">
+              <div class="entry-tags" v-if="entry.tags && entry.tags.length > 0">
+                <span 
+                  v-for="tag in entry.tags.slice(0, 2)" 
+                  :key="tag" 
+                  class="tag"
+                >
+                  #{{ tag }}
+                </span>
+              </div>
+              
+              <div class="entry-actions">
+                <span class="reading-time">{{ entry.estimatedReadingTime }}</span>
+                <button @click="() => router.push(`/entry/${entry.id}`)" class="read-more-btn">Leer más</button>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
 
     <!-- Sección de entradas -->
-    <div class="latest-entries-section">
+    <div v-if="!showSearchResults" class="latest-entries-section">
 
       <div v-if="loading" class="loading-state">
         <div class="loading-spinner"></div>
@@ -139,10 +300,14 @@ const handleReadMore = (entryId: string) => {
                   :key="tag" 
                   class="tag"
                 >
-                  {{ tag }}
+                  #{{ tag }}
                 </span>
               </div>
-              <button @click="handleReadMore(entry.id)" class="read-more-btn">Leer más</button>
+              
+              <div class="entry-actions">
+                <span class="reading-time">{{ entry.estimatedReadingTime }}</span>
+                <button @click="() => router.push(`/entry/${entry.id}`)" class="read-more-btn">Leer más</button>
+              </div>
             </div>
           </div>
         </article>
@@ -190,6 +355,116 @@ const handleReadMore = (entryId: string) => {
 .home-page {
   width: 100%;
   max-width: 100%;
+}
+
+/* Estilos del buscador */
+.search-section {
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  background: linear-gradient(135deg, var(--gray-50) 0%, var(--gray-100) 100%);
+  border-radius: var(--border-radius-xl);
+  border: 2px solid var(--gray-200);
+}
+
+.search-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.search-box {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-lg);
+  border: 2px solid var(--gray-200);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.search-box:focus-within {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  padding: 1rem 1.5rem;
+  border: none;
+  outline: none;
+  font-size: 1.1rem;
+  background: transparent;
+  color: var(--gray-800);
+}
+
+.search-input::placeholder {
+  color: var(--gray-500);
+}
+
+.search-btn {
+  padding: 1rem 1.5rem;
+  background: var(--gradient-primary);
+  border: none;
+  color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.2rem;
+}
+
+.search-btn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-md);
+}
+
+.search-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.clear-btn {
+  padding: 1rem;
+  background: var(--gray-200);
+  border: none;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1.1rem;
+}
+
+.clear-btn:hover {
+  background: var(--gray-300);
+  color: var(--gray-800);
+}
+
+.search-spinner {
+  animation: spin 1s linear infinite;
+}
+
+/* Estilos de resultados de búsqueda */
+.search-results-section {
+  margin-bottom: 3rem;
+}
+
+.search-results-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.search-results-header h2 {
+  color: var(--gray-800);
+  font-size: 2rem;
+  margin-bottom: 1rem;
+}
+
+.results-count {
+  color: var(--gray-600);
+  font-size: 1.1rem;
+}
+
+.no-results {
+  color: var(--gray-500);
+  font-style: italic;
 }
 
 /* Estilos para la sección de entradas */
@@ -416,6 +691,19 @@ const handleReadMore = (entryId: string) => {
   letter-spacing: 0.025em;
 }
 
+.entry-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.reading-time {
+  color: var(--gray-600);
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
 .read-more-btn {
   background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%);
   color: white;
@@ -434,10 +722,10 @@ const handleReadMore = (entryId: string) => {
   position: relative;
   overflow: hidden;
   text-transform: none;
+  text-align: center;
   letter-spacing: 0.025em;
   z-index: 10;
   pointer-events: auto;
-  margin-left: 1rem;
 }
 
 .read-more-btn::before {

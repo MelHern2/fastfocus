@@ -206,17 +206,11 @@ else {
             }
         }
         __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
-            ...{ onClick: (...[$event]) => {
-                    if (!!(__VLS_ctx.loading))
-                        return;
-                    if (!!(__VLS_ctx.latestEntries.length === 0))
-                        return;
-                    __VLS_ctx.handleReadMore(entry.id);
-                    // @ts-ignore
-                    [handleReadMore,];
-                } },
+            ...{ onClick: (() => __VLS_ctx.router.push(`/entry/${entry.id}`)) },
             ...{ class: "read-more-btn" },
         });
+        // @ts-ignore
+        [router,];
     }
 }
 if (__VLS_ctx.totalPages > 1) {
@@ -319,6 +313,7 @@ if (__VLS_ctx.totalPages > 1) {
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup: () => ({
+        router: router,
         latestEntries: latestEntries,
         loading: loading,
         currentPage: currentPage,
@@ -328,7 +323,6 @@ const __VLS_self = (await import('vue')).defineComponent({
         goToPage: goToPage,
         getCategoryName: getCategoryName,
         formatDate: formatDate,
-        handleReadMore: handleReadMore,
     }),
 });
 export default (await import('vue')).defineComponent({});

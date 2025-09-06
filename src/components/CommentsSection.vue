@@ -63,7 +63,7 @@
         
         
         <CommentItem
-          v-for="comment in commentsWithReplies"
+          v-for="comment in allCommentsFlat"
           :key="comment.id"
           :comment="comment"
           :entry-id="entryId"
@@ -144,6 +144,30 @@ const replyPlaceholder = ref('Escribe tu respuesta...')
 const sendingVerification = ref(false)
 
 let unsubscribe: (() => void) | null = null
+
+// Computed property para aplanar todos los comentarios
+const allCommentsFlat = computed(() => {
+  const flattenComments = (comments: CommentWithReplies[]): CommentWithReplies[] => {
+    const result: CommentWithReplies[] = []
+    
+    for (const comment of comments) {
+      // Agregar el comentario principal sin sus respuestas anidadas
+      result.push({
+        ...comment,
+        replies: [] // Eliminar las respuestas anidadas
+      })
+      
+      // Si tiene respuestas, agregarlas también al mismo nivel
+      if (comment.replies && comment.replies.length > 0) {
+        result.push(...flattenComments(comment.replies))
+      }
+    }
+    
+    return result
+  }
+  
+  return flattenComments(commentsWithReplies.value)
+})
 
 // Computed property para contar todos los comentarios incluyendo respuestas
 const totalCommentsCount = computed(() => {
