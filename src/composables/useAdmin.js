@@ -8,7 +8,6 @@ export function useAdmin() {
     const loading = ref(false);
     // Email del administrador
     const ADMIN_EMAIL = 'melanasdoblaktocas3@gmail.com';
-    
     // Función para verificar si un email es de administrador (más flexible)
     const isAdminEmail = (email) => {
         if (!email)
@@ -56,7 +55,6 @@ export function useAdmin() {
             userEmail: user.value?.email,
             loading: loading.value
         });
-        
         if (!user.value?.email) {
             console.log('useAdmin - No hay email de usuario');
             return false;

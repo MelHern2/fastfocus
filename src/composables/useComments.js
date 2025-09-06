@@ -331,7 +331,7 @@ export function useComments() {
         // Siempre permitir eliminar para simplificar
         return true;
         // Los usuarios normales solo pueden eliminar sus propios comentarios dentro de 10 minutos
-        if (!user.value || comment.authorId !== user.value.uid) {
+        if (!user.value || comment.authorId !== user.value?.uid) {
             return false;
         }
         const now = new Date();

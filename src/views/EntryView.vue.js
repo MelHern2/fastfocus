@@ -66,6 +66,7 @@ const initSummernote = () => {
 };
 // Crear jerarquía de categorías para el select
 const categoriesWithHierarchy = computed(() => {
+    console.log('Computing categoriesWithHierarchy, categories:', categories.value.length);
     const tree = buildCategoryTree();
     const result = [];
     const addCategories = (categories, level = 0) => {
@@ -82,6 +83,7 @@ const categoriesWithHierarchy = computed(() => {
         });
     };
     addCategories(tree);
+    console.log('CategoriesWithHierarchy result:', result.length);
     return result;
 });
 const resetForm = () => {
@@ -381,12 +383,16 @@ else {
         value: (__VLS_ctx.formData.categoryId),
         required: true,
         ...{ class: "form-select" },
+        disabled: (__VLS_ctx.categories.length === 0),
     });
     // @ts-ignore
-    [formData,];
+    [formData, categories,];
     __VLS_asFunctionalElement(__VLS_elements.option, __VLS_elements.option)({
         value: "",
     });
+    (__VLS_ctx.categories.length === 0 ? 'Cargando categorías...' : 'Selecciona una categoría');
+    // @ts-ignore
+    [categories,];
     for (const [category] of __VLS_getVForSourceType((__VLS_ctx.categoriesWithHierarchy))) {
         // @ts-ignore
         [categoriesWithHierarchy,];
@@ -640,6 +646,7 @@ var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup: () => ({
         loading: loading,
+        categories: categories,
         formData: formData,
         tagsInput: tagsInput,
         isEditing: isEditing,

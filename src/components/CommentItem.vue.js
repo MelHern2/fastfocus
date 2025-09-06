@@ -81,23 +81,12 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
-/** @type {__VLS_StyleScopedClasses['is-reply']} */ ;
-/** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
-/** @type {__VLS_StyleScopedClasses['is-reply']} */ ;
-/** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['action-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['action-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['action-btn-delete']} */ ;
 /** @type {__VLS_StyleScopedClasses['action-btn-delete']} */ ;
 /** @type {__VLS_StyleScopedClasses['admin-delete']} */ ;
 /** @type {__VLS_StyleScopedClasses['replies-list']} */ ;
-/** @type {__VLS_StyleScopedClasses['replies-list']} */ ;
-/** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
-/** @type {__VLS_StyleScopedClasses['is-reply']} */ ;
-/** @type {__VLS_StyleScopedClasses['replies-list']} */ ;
-/** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
-/** @type {__VLS_StyleScopedClasses['is-reply']} */ ;
-/** @type {__VLS_StyleScopedClasses['comment-replies']} */ ;
 /** @type {__VLS_StyleScopedClasses['replies-list']} */ ;
 /** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['is-reply']} */ ;
@@ -119,11 +108,11 @@ let __VLS_directives;
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
     ...{ class: "comment-item" },
     id: (`comment-${__VLS_ctx.comment.id}`),
-    ...{ class: ({ 'is-reply': __VLS_ctx.comment.parentId, 'is-being-replied-to': __VLS_ctx.isReplyingToThis }) },
+    ...{ class: ({ 'is-reply': __VLS_ctx.comment.parentId && !__VLS_ctx.isNested, 'is-nested-reply': __VLS_ctx.comment.parentId && __VLS_ctx.isNested, 'is-being-replied-to': __VLS_ctx.isReplyingToThis }) },
     'data-comment-id': (__VLS_ctx.comment.id),
 });
 // @ts-ignore
-[comment, comment, comment, isReplyingToThis,];
+[comment, comment, comment, comment, isNested, isNested, isReplyingToThis,];
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
     ...{ class: "comment-content" },
 });
@@ -315,8 +304,6 @@ if (!__VLS_ctx.user) {
     [comment,];
 }
 if (true) {
-    // @ts-ignore
-    [canEdit, canDelete,];
     __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
         ...{ class: "comment-actions-owner" },
     });
@@ -325,7 +312,7 @@ if (true) {
         [canEdit,];
         __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
             ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.canEdit || __VLS_ctx.canDelete))
+                    if (!(true))
                         return;
                     if (!(__VLS_ctx.canEdit))
                         return;
@@ -356,11 +343,12 @@ if (true) {
         }
     }
     if (true) {
-        // @ts-ignore
-        [canDelete,];
         __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
             ...{ onClick: (...[$event]) => {
-                    // Siempre permitir eliminar
+                    if (!(true))
+                        return;
+                    if (!(true))
+                        return;
                     __VLS_ctx.$emit('delete', __VLS_ctx.comment);
                     // @ts-ignore
                     [comment, $emit,];
@@ -434,9 +422,9 @@ if (__VLS_ctx.user && __VLS_ctx.isReplyingToThis) {
     // @ts-ignore
     [replyContent,];
 }
-if (__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0) {
+if (__VLS_ctx.comment.replyCount > 0) {
     // @ts-ignore
-    [comment, comment,];
+    [comment,];
     __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
         ...{ class: "comment-replies" },
     });
@@ -453,80 +441,10 @@ if (__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0) {
     (__VLS_ctx.comment.replyCount !== 1 ? 's' : '');
     // @ts-ignore
     [comment, comment,];
-    __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
-        ...{ class: "replies-list" },
-    });
-    for (const [reply] of __VLS_getVForSourceType((__VLS_ctx.comment.replies))) {
-        // @ts-ignore
-        [comment,];
-        const __VLS_0 = {}.CommentItem;
-        /** @type {[typeof __VLS_components.CommentItem, ]} */ ;
-        // @ts-ignore
-        CommentItem;
-        // @ts-ignore
-        const __VLS_1 = __VLS_asFunctionalComponent(__VLS_0, new __VLS_0({
-            ...{ 'onReply': {} },
-            ...{ 'onEdit': {} },
-            ...{ 'onDelete': {} },
-            ...{ 'onLike': {} },
-            ...{ 'onDislike': {} },
-            key: (reply.id),
-            comment: (reply),
-            entryId: (__VLS_ctx.entryId),
-            isNested: (true),
-        }));
-        const __VLS_2 = __VLS_1({
-            ...{ 'onReply': {} },
-            ...{ 'onEdit': {} },
-            ...{ 'onDelete': {} },
-            ...{ 'onLike': {} },
-            ...{ 'onDislike': {} },
-            key: (reply.id),
-            comment: (reply),
-            entryId: (__VLS_ctx.entryId),
-            isNested: (true),
-        }, ...__VLS_functionalComponentArgsRest(__VLS_1));
-        let __VLS_4;
-        let __VLS_5;
-        const __VLS_6 = ({ reply: {} },
-            { onReply: (__VLS_ctx.handleNestedReply) });
-        const __VLS_7 = ({ edit: {} },
-            { onEdit: (...[$event]) => {
-                    if (!(__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0))
-                        return;
-                    __VLS_ctx.$emit('edit', $event);
-                    // @ts-ignore
-                    [$emit, entryId, handleNestedReply,];
-                } });
-        const __VLS_8 = ({ delete: {} },
-            { onDelete: (...[$event]) => {
-                    if (!(__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0))
-                        return;
-                    __VLS_ctx.$emit('delete', $event);
-                    // @ts-ignore
-                    [$emit,];
-                } });
-        const __VLS_9 = ({ like: {} },
-            { onLike: (...[$event]) => {
-                    if (!(__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0))
-                        return;
-                    __VLS_ctx.$emit('like', $event);
-                    // @ts-ignore
-                    [$emit,];
-                } });
-        const __VLS_10 = ({ dislike: {} },
-            { onDislike: (...[$event]) => {
-                    if (!(__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0))
-                        return;
-                    __VLS_ctx.$emit('dislike', $event);
-                    // @ts-ignore
-                    [$emit,];
-                } });
-        var __VLS_3;
-    }
 }
 /** @type {__VLS_StyleScopedClasses['comment-item']} */ ;
 /** @type {__VLS_StyleScopedClasses['is-reply']} */ ;
+/** @type {__VLS_StyleScopedClasses['is-nested-reply']} */ ;
 /** @type {__VLS_StyleScopedClasses['is-being-replied-to']} */ ;
 /** @type {__VLS_StyleScopedClasses['comment-content']} */ ;
 /** @type {__VLS_StyleScopedClasses['comment-header']} */ ;
@@ -591,7 +509,6 @@ if (__VLS_ctx.comment.replies && __VLS_ctx.comment.replies.length > 0) {
 /** @type {__VLS_StyleScopedClasses['replies-indicator']} */ ;
 /** @type {__VLS_StyleScopedClasses['replies-line']} */ ;
 /** @type {__VLS_StyleScopedClasses['replies-text']} */ ;
-/** @type {__VLS_StyleScopedClasses['replies-list']} */ ;
 var __VLS_dollars;
 const __VLS_self = (await import('vue')).defineComponent({
     setup: () => ({
@@ -602,8 +519,6 @@ const __VLS_self = (await import('vue')).defineComponent({
         getEditTimeRemaining: getEditTimeRemaining,
         getDeleteTimeRemaining: getDeleteTimeRemaining,
         canEdit: canEdit,
-        canDelete: canDelete,
-        handleNestedReply: handleNestedReply,
         handleReplyClick: handleReplyClick,
         handleSubmitReply: handleSubmitReply,
         handleCancelReply: handleCancelReply,

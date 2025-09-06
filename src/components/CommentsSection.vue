@@ -425,7 +425,7 @@ const handleDelete = async (comment: CommentWithReplies) => {
     success('Comentario eliminado correctamente')
   } catch (error) {
     console.error('handleDelete - Error:', error)
-    showError('Error al eliminar el comentario: ' + error.message)
+    showError('Error al eliminar el comentario: ' + (error as Error).message)
   }
 }
 

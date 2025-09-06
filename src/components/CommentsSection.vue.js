@@ -19,6 +19,25 @@ const replyContent = ref('');
 const replyPlaceholder = ref('Escribe tu respuesta...');
 const sendingVerification = ref(false);
 let unsubscribe = null;
+// Computed property para aplanar todos los comentarios
+const allCommentsFlat = computed(() => {
+    const flattenComments = (comments) => {
+        const result = [];
+        for (const comment of comments) {
+            // Agregar el comentario principal sin sus respuestas anidadas
+            result.push({
+                ...comment,
+                replies: [] // Eliminar las respuestas anidadas
+            });
+            // Si tiene respuestas, agregarlas también al mismo nivel
+            if (comment.replies && comment.replies.length > 0) {
+                result.push(...flattenComments(comment.replies));
+            }
+        }
+        return result;
+    };
+    return flattenComments(commentsWithReplies.value);
+});
 // Computed property para contar todos los comentarios incluyendo respuestas
 const totalCommentsCount = computed(() => {
     // Filtrar comentarios de esta entrada específica y contar todos
@@ -463,9 +482,9 @@ else {
     __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
         ...{ class: "comments-list" },
     });
-    for (const [comment] of __VLS_getVForSourceType((__VLS_ctx.commentsWithReplies))) {
+    for (const [comment] of __VLS_getVForSourceType((__VLS_ctx.allCommentsFlat))) {
         // @ts-ignore
-        [commentsWithReplies,];
+        [allCommentsFlat,];
         /** @type {[typeof CommentItem, ]} */ ;
         // @ts-ignore
         const __VLS_7 = __VLS_asFunctionalComponent(CommentItem, new CommentItem({
@@ -604,6 +623,7 @@ const __VLS_self = (await import('vue')).defineComponent({
         editContent: editContent,
         replyingTo: replyingTo,
         sendingVerification: sendingVerification,
+        allCommentsFlat: allCommentsFlat,
         totalCommentsCount: totalCommentsCount,
         handleSubmitComment: handleSubmitComment,
         handleReply: handleReply,
