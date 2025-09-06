@@ -10,7 +10,7 @@ export function useAdmin() {
   const loading = ref(false)
   
   // Email del administrador
-  const ADMIN_EMAIL = 'melanasdoblaktocas3@gmail.com'
+  const ADMIN_EMAIL = 'melenasdoblaktocas3@gmail.com'
   
   // Función para verificar si un email es de administrador (más flexible)
   const isAdminEmail = (email: string | null | undefined): boolean => {

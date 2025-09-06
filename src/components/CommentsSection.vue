@@ -808,23 +808,160 @@ onUnmounted(() => {
     padding-top: 1.5rem;
   }
   
+  .comments-title {
+    font-size: 1.25rem;
+    margin-left: 0.5rem;
+  }
+  
   .comment-form-container,
   .reply-form-container {
     padding: 1rem;
+    border-radius: 12px;
+  }
+  
+  .comment-textarea {
+    padding: 0.875rem;
+    font-size: 16px; /* Evita zoom en iOS */
+    min-height: 70px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .btn {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    font-size: 16px; /* Evita zoom en iOS */
   }
   
   .modal-content {
     padding: 1.5rem;
     margin: 1rem;
     max-width: 95%;
+    border-radius: 12px;
   }
   
   .modal-actions {
     flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .edit-textarea {
+    padding: 0.875rem;
+    font-size: 16px; /* Evita zoom en iOS */
+    min-height: 80px;
+  }
+  
+  .comments-list {
+    gap: 1rem;
+  }
+  
+  .login-prompt {
+    padding: 0.875rem;
+    border-radius: 8px;
+  }
+  
+  .no-comments {
+    padding: 1.5rem;
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .comments-section {
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+  }
+  
+  .comments-title {
+    font-size: 1.125rem;
+    margin-left: 0;
+    margin-bottom: 1.5rem;
+  }
+  
+  .comment-form-container,
+  .reply-form-container {
+    padding: 0.875rem;
+    border-radius: 8px;
+  }
+  
+  .comment-textarea {
+    padding: 0.75rem;
+    font-size: 16px;
+    min-height: 60px;
   }
   
   .btn {
-    width: 100%;
+    padding: 0.75rem 0.875rem;
+    font-size: 16px;
+  }
+  
+  .modal-content {
+    padding: 1rem;
+    margin: 0.5rem;
+    max-width: 98%;
+    border-radius: 8px;
+  }
+  
+  .edit-textarea {
+    padding: 0.75rem;
+    font-size: 16px;
+    min-height: 70px;
+  }
+  
+  .comments-list {
+    gap: 0.875rem;
+  }
+  
+  .login-prompt {
+    padding: 0.75rem;
+  }
+  
+  .no-comments {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .reply-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .cancel-reply-btn {
+    align-self: flex-end;
+  }
+}
+
+@media (max-width: 360px) {
+  .comment-form-container,
+  .reply-form-container {
+    padding: 0.75rem;
+  }
+  
+  .comment-textarea {
+    padding: 0.625rem;
+    min-height: 50px;
+  }
+  
+  .btn {
+    padding: 0.625rem 0.75rem;
+  }
+  
+  .modal-content {
+    padding: 0.875rem;
+    margin: 0.25rem;
+  }
+  
+  .edit-textarea {
+    padding: 0.625rem;
+    min-height: 60px;
+  }
+  
+  .comments-list {
+    gap: 0.75rem;
   }
 }
 

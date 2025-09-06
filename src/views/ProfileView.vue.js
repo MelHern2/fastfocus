@@ -34,6 +34,28 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['profile-container']} */ ;
 /** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
 /** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-content']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['retry-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-view']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-container']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-content']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['retry-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-container']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-state']} */ ;
+/** @type {__VLS_StyleScopedClasses['retry-btn']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({

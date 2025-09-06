@@ -21,11 +21,29 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['categories-header']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-card']} */ ;
 /** @type {__VLS_StyleScopedClasses['categories-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-card']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-content']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-actions']} */ ;
+/** @type {__VLS_StyleScopedClasses['action-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-name']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-description']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-meta']} */ ;
+/** @type {__VLS_StyleScopedClasses['parent-info']} */ ;
+/** @type {__VLS_StyleScopedClasses['root-category']} */ ;
+/** @type {__VLS_StyleScopedClasses['date-info']} */ ;
+/** @type {__VLS_StyleScopedClasses['categories-grid']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-card']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-name']} */ ;
 /** @type {__VLS_StyleScopedClasses['category-description']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-meta']} */ ;
+/** @type {__VLS_StyleScopedClasses['parent-info']} */ ;
+/** @type {__VLS_StyleScopedClasses['root-category']} */ ;
+/** @type {__VLS_StyleScopedClasses['date-info']} */ ;
+/** @type {__VLS_StyleScopedClasses['action-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-name']} */ ;
+/** @type {__VLS_StyleScopedClasses['category-description']} */ ;
+/** @type {__VLS_StyleScopedClasses['action-btn']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({

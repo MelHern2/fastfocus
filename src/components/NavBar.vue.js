@@ -17,6 +17,10 @@ let hoverTimeout = null;
 const isAdminPage = computed(() => {
     return route.path.startsWith('/admin');
 });
+// Función para toggle del dropdown
+const toggleDropdown = () => {
+    showDropdown.value = !showDropdown.value;
+};
 // Debug para hover
 watch(hoveredCategory, (newVal) => {
     console.log('Hovered category changed:', newVal);
@@ -45,16 +49,26 @@ onUnmounted(() => {
     }
 });
 // Debug: verificar estado de admin
-console.log('NavBar - Usuario:', user.value?.email);
-console.log('NavBar - DisplayName:', user.value?.displayName);
-console.log('NavBar - Es admin:', isAdmin.value);
-console.log('NavBar - Email coincide:', user.value?.email === 'melenasdoblaktocas3@gmail.com');
-console.log('NavBar - Condición botón admin:', user.value && user.value.email === 'melenasdoblaktocas3@gmail.com');
+watch(user, (newUser) => {
+    console.log('NavBar - Usuario actualizado:', newUser);
+    console.log('NavBar - Email:', newUser?.email);
+    console.log('NavBar - Email tipo:', typeof newUser?.email);
+    console.log('NavBar - Email longitud:', newUser?.email?.length);
+    console.log('NavBar - Email charCodeAt:', newUser?.email?.split('').map(c => c.charCodeAt(0)));
+    console.log('NavBar - DisplayName:', newUser?.displayName);
+    console.log('NavBar - Es admin:', isAdmin.value);
+    console.log('NavBar - Email coincide exacto:', newUser?.email === 'melanasdoblaktocas3@gmail.com');
+    console.log('NavBar - Email coincide normalizado:', newUser?.email?.toLowerCase().trim() === 'melanasdoblaktocas3@gmail.com');
+    console.log('NavBar - Condición botón admin:', newUser && newUser.email && newUser.email.toLowerCase().trim() === 'melanasdoblaktocas3@gmail.com');
+    console.log('NavBar - Está en admin page:', isAdminPage.value);
+}, { immediate: true });
 debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_elements;
 let __VLS_components;
 let __VLS_directives;
+/** @type {__VLS_StyleScopedClasses['nav-container']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-container']} */ ;
 /** @type {__VLS_StyleScopedClasses['brand-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['brand-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-logo']} */ ;
@@ -77,13 +91,29 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['nav-logo']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-logo']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-container']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-brand']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-logo']} */ ;
 /** @type {__VLS_StyleScopedClasses['brand-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-menu']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['dropdown-menu']} */ ;
 /** @type {__VLS_StyleScopedClasses['user-menu']} */ ;
-/** @type {__VLS_StyleScopedClasses['user-name']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['logout-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['admin-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['back-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['admin-text']} */ ;
+/** @type {__VLS_StyleScopedClasses['back-text']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-container']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-logo']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-menu']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['user-menu']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['logout-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['admin-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['back-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['dropdown-menu']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_elements.nav, __VLS_elements.nav)({
@@ -147,8 +177,11 @@ __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
     ...{ class: "dropdown-container" },
 });
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
+    ...{ onClick: (__VLS_ctx.toggleDropdown) },
     ...{ class: "nav-link dropdown-trigger" },
 });
+// @ts-ignore
+[toggleDropdown,];
 __VLS_asFunctionalElement(__VLS_elements.span, __VLS_elements.span)({
     ...{ class: "dropdown-arrow" },
 });
@@ -258,53 +291,53 @@ if (!__VLS_ctx.user) {
     var __VLS_29;
 }
 else {
-    if (__VLS_ctx.isAdminPage) {
+    if (__VLS_ctx.user && __VLS_ctx.user.email && __VLS_ctx.user.email.toLowerCase().trim() === 'melenasdoblaktocas3@gmail.com') {
         // @ts-ignore
-        [isAdminPage,];
+        [user, user, user,];
         const __VLS_31 = {}.RouterLink;
         /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.routerLink, typeof __VLS_components.RouterLink, typeof __VLS_components.routerLink, ]} */ ;
         // @ts-ignore
         RouterLink;
         // @ts-ignore
         const __VLS_32 = __VLS_asFunctionalComponent(__VLS_31, new __VLS_31({
-            to: "/",
-            ...{ class: "nav-link back-link" },
+            to: "/admin",
+            ...{ class: "nav-link admin-link" },
         }));
         const __VLS_33 = __VLS_32({
-            to: "/",
-            ...{ class: "nav-link back-link" },
+            to: "/admin",
+            ...{ class: "nav-link admin-link" },
         }, ...__VLS_functionalComponentArgsRest(__VLS_32));
         const { default: __VLS_35 } = __VLS_34.slots;
         __VLS_asFunctionalElement(__VLS_elements.span, __VLS_elements.span)({
-            ...{ class: "back-icon" },
+            ...{ class: "admin-icon" },
         });
         __VLS_asFunctionalElement(__VLS_elements.span, __VLS_elements.span)({
-            ...{ class: "back-text" },
+            ...{ class: "admin-text" },
         });
         var __VLS_34;
     }
-    else if (__VLS_ctx.user && __VLS_ctx.user.email === 'melanasdoblaktocas3@gmail.com') {
+    if (__VLS_ctx.isAdminPage) {
         // @ts-ignore
-        [user, user,];
+        [isAdminPage,];
         const __VLS_36 = {}.RouterLink;
         /** @type {[typeof __VLS_components.RouterLink, typeof __VLS_components.routerLink, typeof __VLS_components.RouterLink, typeof __VLS_components.routerLink, ]} */ ;
         // @ts-ignore
         RouterLink;
         // @ts-ignore
         const __VLS_37 = __VLS_asFunctionalComponent(__VLS_36, new __VLS_36({
-            to: "/admin",
-            ...{ class: "nav-link admin-link" },
+            to: "/",
+            ...{ class: "nav-link back-link" },
         }));
         const __VLS_38 = __VLS_37({
-            to: "/admin",
-            ...{ class: "nav-link admin-link" },
+            to: "/",
+            ...{ class: "nav-link back-link" },
         }, ...__VLS_functionalComponentArgsRest(__VLS_37));
         const { default: __VLS_40 } = __VLS_39.slots;
         __VLS_asFunctionalElement(__VLS_elements.span, __VLS_elements.span)({
-            ...{ class: "admin-icon" },
+            ...{ class: "back-icon" },
         });
         __VLS_asFunctionalElement(__VLS_elements.span, __VLS_elements.span)({
-            ...{ class: "admin-text" },
+            ...{ class: "back-text" },
         });
         var __VLS_39;
     }
@@ -358,13 +391,13 @@ else {
 /** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
-/** @type {__VLS_StyleScopedClasses['back-link']} */ ;
-/** @type {__VLS_StyleScopedClasses['back-icon']} */ ;
-/** @type {__VLS_StyleScopedClasses['back-text']} */ ;
-/** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['admin-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['admin-icon']} */ ;
 /** @type {__VLS_StyleScopedClasses['admin-text']} */ ;
+/** @type {__VLS_StyleScopedClasses['nav-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['back-link']} */ ;
+/** @type {__VLS_StyleScopedClasses['back-icon']} */ ;
+/** @type {__VLS_StyleScopedClasses['back-text']} */ ;
 /** @type {__VLS_StyleScopedClasses['user-menu']} */ ;
 /** @type {__VLS_StyleScopedClasses['profile-link']} */ ;
 /** @type {__VLS_StyleScopedClasses['user-name']} */ ;
@@ -380,6 +413,7 @@ const __VLS_self = (await import('vue')).defineComponent({
         showDropdown: showDropdown,
         categoriesTree: categoriesTree,
         isAdminPage: isAdminPage,
+        toggleDropdown: toggleDropdown,
     }),
 });
 export default (await import('vue')).defineComponent({});

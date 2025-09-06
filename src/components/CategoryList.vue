@@ -264,6 +264,12 @@ const formatDate = (date: Date): string => {
 @media (max-width: 768px) {
   .categories-grid {
     grid-template-columns: 1fr;
+    gap: 15px;
+  }
+  
+  .category-card {
+    padding: 15px;
+    border-radius: 6px;
   }
   
   .category-content {
@@ -274,12 +280,13 @@ const formatDate = (date: Date): string => {
   .category-actions {
     flex-direction: row;
     justify-content: flex-end;
+    gap: 6px;
   }
-}
-
-@media (max-width: 480px) {
-  .category-card {
-    padding: 15px;
+  
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
   }
   
   .category-name {
@@ -288,6 +295,80 @@ const formatDate = (date: Date): string => {
   
   .category-description {
     font-size: 0.8rem;
+  }
+  
+  .category-meta {
+    margin-bottom: 10px;
+  }
+  
+  .parent-info,
+  .root-category {
+    font-size: 0.75rem;
+    padding: 3px 6px;
+  }
+  
+  .date-info {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .categories-grid {
+    gap: 12px;
+  }
+  
+  .category-card {
+    padding: 12px;
+  }
+  
+  .category-name {
+    font-size: 0.95rem;
+  }
+  
+  .category-description {
+    font-size: 0.75rem;
+  }
+  
+  .category-meta {
+    margin-bottom: 8px;
+  }
+  
+  .parent-info,
+  .root-category {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+  }
+  
+  .date-info {
+    font-size: 0.65rem;
+  }
+  
+  .action-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
+    padding: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .category-card {
+    padding: 10px;
+  }
+  
+  .category-name {
+    font-size: 0.9rem;
+  }
+  
+  .category-description {
+    font-size: 0.7rem;
+  }
+  
+  .action-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 11px;
+    padding: 5px;
   }
 }
 </style>

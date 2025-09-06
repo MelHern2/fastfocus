@@ -326,20 +326,101 @@ const handleDelete = async (entry: Entry) => {
 @media (max-width: 768px) {
   .entries-grid {
     grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .entry-card {
+    padding: 1rem;
+    border-radius: 8px;
+  }
+  
+  .entry-title {
+    font-size: 1.125rem;
+  }
+  
+  .entry-meta {
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
   }
   
   .entry-footer {
     flex-direction: column;
     align-items: flex-start;
+    gap: 0.75rem;
   }
   
   .entry-actions {
     width: 100%;
     justify-content: stretch;
+    gap: 0.5rem;
   }
   
   .btn {
     flex: 1;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .entries-grid {
+    gap: 0.75rem;
+  }
+  
+  .entry-card {
+    padding: 0.875rem;
+  }
+  
+  .entry-title {
+    font-size: 1rem;
+  }
+  
+  .entry-meta {
+    font-size: 0.8rem;
+  }
+  
+  .entry-excerpt {
+    font-size: 0.9rem;
+  }
+  
+  .btn {
+    padding: 0.375rem 0.625rem;
+    font-size: 0.75rem;
+  }
+  
+  .tag {
+    font-size: 0.7rem;
+    padding: 2px 4px;
+  }
+  
+  .status-badge,
+  .featured-badge {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .entry-card {
+    padding: 0.75rem;
+  }
+  
+  .entry-title {
+    font-size: 0.95rem;
+  }
+  
+  .entry-meta {
+    font-size: 0.75rem;
+  }
+  
+  .entry-excerpt {
+    font-size: 0.85rem;
+  }
+  
+  .btn {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.7rem;
   }
 }
 </style>

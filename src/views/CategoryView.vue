@@ -835,6 +835,8 @@ watch(() => route.params.id, async (newId) => {
   color: var(--gray-600);
   font-size: 0.875rem;
   font-weight: 500;
+  display: block;
+  white-space: nowrap;
 }
 
 .read-more-btn {

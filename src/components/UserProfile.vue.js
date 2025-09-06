@@ -100,6 +100,24 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['save-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['save-btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['cancel-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['user-profile']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['avatar-circle']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-name']} */ ;
+/** @type {__VLS_StyleScopedClasses['info-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['info-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['edit-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-actions']} */ ;
+/** @type {__VLS_StyleScopedClasses['save-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['cancel-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['user-profile']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['avatar-circle']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-name']} */ ;
+/** @type {__VLS_StyleScopedClasses['profile-email']} */ ;
+/** @type {__VLS_StyleScopedClasses['info-item']} */ ;
+/** @type {__VLS_StyleScopedClasses['edit-btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-group']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({

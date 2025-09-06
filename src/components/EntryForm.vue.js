@@ -141,9 +141,45 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn-secondary']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn-primary']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-row']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-form-overlay']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-form']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-content']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-row']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-group']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-input']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-textarea']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-select']} */ ;
+/** @type {__VLS_StyleScopedClasses['quill-editor']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-actions']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['checkbox-group']} */ ;
+/** @type {__VLS_StyleScopedClasses['checkbox-label']} */ ;
+/** @type {__VLS_StyleScopedClasses['checkbox']} */ ;
+/** @type {__VLS_StyleScopedClasses['checkbox-text']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-form-overlay']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-form']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-content']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-group']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-input']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-textarea']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-select']} */ ;
+/** @type {__VLS_StyleScopedClasses['quill-editor']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-actions']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['tags-preview']} */ ;
+/** @type {__VLS_StyleScopedClasses['tag']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-form-overlay']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-content']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-group']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-input']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-textarea']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-select']} */ ;
+/** @type {__VLS_StyleScopedClasses['quill-editor']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
@@ -237,23 +273,9 @@ __VLS_asFunctionalElement(__VLS_elements.textarea, __VLS_elements.textarea)({
 [formData,];
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
     ...{ class: "form-group" },
-    ...{ style: {} },
-});
-__VLS_asFunctionalElement(__VLS_elements.h2, __VLS_elements.h2)({
-    ...{ style: {} },
-});
-__VLS_asFunctionalElement(__VLS_elements.input)({
-    type: "text",
-    placeholder: "ESTO DEBERÍA SER VISIBLE",
-    ...{ style: {} },
-});
-__VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
-    ...{ class: "form-group" },
-    ...{ style: {} },
 });
 __VLS_asFunctionalElement(__VLS_elements.label, __VLS_elements.label)({
     for: "estimatedReadingTime",
-    ...{ style: {} },
 });
 __VLS_asFunctionalElement(__VLS_elements.input)({
     id: "estimatedReadingTime",
@@ -261,13 +283,11 @@ __VLS_asFunctionalElement(__VLS_elements.input)({
     type: "text",
     placeholder: "Ej: 5 minutos, 10-15 min, etc. (opcional)",
     ...{ class: "form-input" },
-    ...{ style: {} },
 });
 // @ts-ignore
 [formData,];
 __VLS_asFunctionalElement(__VLS_elements.small, __VLS_elements.small)({
     ...{ class: "form-help" },
-    ...{ style: {} },
 });
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
     ...{ class: "form-group" },
@@ -383,7 +403,6 @@ __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
 /** @type {__VLS_StyleScopedClasses['form-select']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-group']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-textarea']} */ ;
-/** @type {__VLS_StyleScopedClasses['form-group']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-group']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-input']} */ ;
 /** @type {__VLS_StyleScopedClasses['form-help']} */ ;

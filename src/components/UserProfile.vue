@@ -334,6 +334,7 @@ onMounted(() => {
   background: #f8fafc;
   border-radius: 12px;
   border: 2px solid #e5e7eb;
+  flex-wrap: wrap;
 }
 
 .info-item label {
@@ -443,6 +444,97 @@ onMounted(() => {
 .cancel-btn:hover {
   background: #e5e7eb;
   border-color: #d1d5db;
+}
+
+/* Estilos responsivos */
+@media (max-width: 768px) {
+  .user-profile {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  
+  .avatar-circle {
+    width: 60px;
+    height: 60px;
+    font-size: 1.25rem;
+  }
+  
+  .profile-name {
+    font-size: 1.25rem;
+  }
+  
+  .info-item {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+    padding: 0.75rem;
+  }
+  
+  .info-item label {
+    min-width: auto;
+    margin-bottom: 0.25rem;
+  }
+  
+  .edit-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .save-btn,
+  .cancel-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .user-profile {
+    padding: 0.75rem;
+    margin: 0.25rem;
+  }
+  
+  .profile-header {
+    padding-bottom: 1rem;
+  }
+  
+  .avatar-circle {
+    width: 50px;
+    height: 50px;
+    font-size: 1rem;
+  }
+  
+  .profile-name {
+    font-size: 1.125rem;
+  }
+  
+  .profile-email {
+    font-size: 0.9rem;
+  }
+  
+  .info-item {
+    padding: 0.5rem;
+  }
+  
+  .edit-btn {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.85rem;
+  }
+  
+  .form-group input {
+    font-size: 16px; /* Previene zoom en iOS */
+  }
 }
 </style>
 

@@ -354,7 +354,7 @@ const handleReadMore = (entryId: string) => {
 <style scoped>
 .home-page {
   width: 100%;
-  max-width: 100%;
+  max-width: none;
 }
 
 /* Estilos del buscador */
@@ -367,8 +367,8 @@ const handleReadMore = (entryId: string) => {
 }
 
 .search-container {
-  max-width: 800px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0;
   padding: 0 2rem;
 }
 
@@ -702,6 +702,8 @@ const handleReadMore = (entryId: string) => {
   color: var(--gray-600);
   font-size: 0.875rem;
   font-weight: 500;
+  display: block;
+  white-space: nowrap;
 }
 
 .read-more-btn {
@@ -833,7 +835,26 @@ const handleReadMore = (entryId: string) => {
 }
 
 /* Responsive Design */
-@media (min-width: 992px) {
+@media (min-width: 1200px) {
+  .entries-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2.5rem;
+  }
+  
+  .entry-title {
+    font-size: 1.5rem;
+  }
+  
+  .entry-image {
+    height: 250px;
+  }
+  
+  .search-container {
+    padding: 0 3rem;
+  }
+}
+
+@media (min-width: 992px) and (max-width: 1199px) {
   .entries-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2rem;
@@ -849,17 +870,51 @@ const handleReadMore = (entryId: string) => {
 }
 
 @media (max-width: 768px) {
+  .search-section {
+    margin-bottom: 2rem;
+    padding: 1.5rem 0;
+  }
+  
+  .search-container {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-box {
+    flex-direction: column;
+    border-radius: var(--border-radius-md);
+  }
+  
+  .search-input {
+    padding: 0.875rem 1rem;
+    font-size: 16px; /* Evita zoom en iOS */
+    border-bottom: 1px solid var(--gray-200);
+  }
+  
+  .search-btn,
+  .clear-btn {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+  }
+  
   .entries-grid {
     grid-template-columns: 1fr;
     gap: 1.5rem;
+    margin: 0;
+    justify-items: center;
   }
   
   .entry-card {
-    margin: 0 1rem;
+    margin: 0;
+    border-radius: 16px;
+    max-width: 100%;
+    width: 100%;
   }
   
   .entry-image {
-    height: 150px;
+    height: 180px;
+    border-radius: 14px 14px 0 0;
   }
   
   .entry-icon {
@@ -871,7 +926,11 @@ const handleReadMore = (entryId: string) => {
   }
   
   .entry-title {
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+  }
+  
+  .entry-excerpt {
+    font-size: 0.9rem;
   }
   
   .entry-footer {
@@ -883,6 +942,154 @@ const handleReadMore = (entryId: string) => {
   .read-more-btn {
     width: 100%;
     text-align: center;
+    padding: 0.75rem 1rem;
+  }
+  
+  .pagination-section {
+    margin: 2rem 0 0;
+    padding: 1.5rem;
+  }
+  
+  .pagination-controls {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .pagination-btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+  }
+  
+  .pagination-numbers {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+@media (max-width: 480px) {
+  .search-section {
+    margin-bottom: 1.5rem;
+    padding: 1rem 0;
+  }
+  
+  .search-container {
+    padding: 0;
+  }
+  
+  .search-input {
+    padding: 0.75rem 0.875rem;
+    font-size: 16px;
+  }
+  
+  .search-btn,
+  .clear-btn {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9rem;
+  }
+  
+  .entries-grid {
+    gap: 1rem;
+    margin: 0;
+    justify-items: center;
+  }
+  
+  .entry-card {
+    border-radius: 12px;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .entry-image {
+    height: 150px;
+    border-radius: 10px 10px 0 0;
+  }
+  
+  .entry-title {
+    font-size: 1rem;
+  }
+  
+  .entry-excerpt {
+    font-size: 0.85rem;
+  }
+  
+  .entry-icon {
+    font-size: 2rem;
+  }
+  
+  .entry-content {
+    padding: 0.875rem;
+  }
+  
+  .entry-title {
+    font-size: 1.125rem;
+  }
+  
+  .entry-excerpt {
+    font-size: 0.9rem;
+  }
+  
+  .read-more-btn {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+  
+  .pagination-section {
+    margin: 1.5rem 0 0;
+    padding: 1rem;
+  }
+  
+  .pagination-info {
+    font-size: 0.8rem;
+  }
+  
+  .pagination-btn {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+  }
+  
+  .pagination-number {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.875rem;
+    min-width: 40px;
+  }
+}
+
+@media (max-width: 360px) {
+  .search-container {
+    padding: 0 0.125rem;
+  }
+  
+  .entries-grid {
+    margin: 0;
+    justify-items: center;
+  }
+  
+  .entry-card {
+    border-radius: 8px;
+    max-width: 100%;
+    width: 100%;
+  }
+  
+  .entry-image {
+    height: 120px;
+    border-radius: 6px 6px 0 0;
+  }
+  
+  .entry-content {
+    padding: 0.75rem;
+  }
+  
+  .entry-title {
+    font-size: 1rem;
+  }
+  
+  .entry-excerpt {
+    font-size: 0.85rem;
+  }
+  
+  .pagination-section {
+    margin: 1rem 0;
+    padding: 0.75rem;
   }
 }
 </style>

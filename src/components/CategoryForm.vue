@@ -328,18 +328,140 @@ onMounted(async () => {
   background: #5a67d8;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
+  .category-form-overlay {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 20px;
+  }
+  
   .category-form {
-    margin: 10px;
+    margin: 0;
     max-width: none;
+    width: 100%;
+    max-height: 95vh;
+    border-radius: 8px;
+  }
+  
+  .form-header {
+    padding: 15px 20px;
+  }
+  
+  .form-header h3 {
+    font-size: 1.125rem;
+  }
+  
+  .form-content {
+    padding: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 12px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+  
+  .form-textarea {
+    min-height: 70px;
   }
   
   .form-actions {
     flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
   }
   
   .btn {
     width: 100%;
+    padding: 12px 20px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+}
+
+@media (max-width: 480px) {
+  .category-form-overlay {
+    padding: 5px;
+    padding-top: 10px;
+  }
+  
+  .category-form {
+    border-radius: 6px;
+  }
+  
+  .form-header {
+    padding: 12px 15px;
+  }
+  
+  .form-header h3 {
+    font-size: 1rem;
+  }
+  
+  .form-content {
+    padding: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .form-textarea {
+    min-height: 60px;
+  }
+  
+  .form-actions {
+    margin-top: 15px;
+    padding-top: 12px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 360px) {
+  .category-form-overlay {
+    padding: 2px;
+    padding-top: 5px;
+  }
+  
+  .form-header {
+    padding: 10px 12px;
+  }
+  
+  .form-content {
+    padding: 12px;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 8px;
+  }
+  
+  .form-textarea {
+    min-height: 50px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
   }
 }
 </style>

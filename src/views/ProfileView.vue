@@ -159,12 +159,107 @@ onMounted(() => {
     padding: 0 0.5rem;
   }
   
+  .profile-header {
+    padding: 1.5rem 1rem;
+  }
+  
   .profile-header h1 {
-    font-size: 2rem;
+    font-size: 1.75rem;
   }
   
   .profile-header p {
+    font-size: 0.95rem;
+  }
+  
+  .profile-content {
+    border-radius: var(--border-radius-xl);
+  }
+  
+  .error-state {
+    padding: 2rem 1rem;
+  }
+  
+  .error-state h2 {
+    font-size: 1.25rem;
+  }
+  
+  .retry-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile-view {
+    padding: 0.5rem 0;
+  }
+  
+  .profile-container {
+    padding: 0 0.25rem;
+  }
+  
+  .profile-header {
+    padding: 1rem 0.75rem;
+  }
+  
+  .profile-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .profile-header p {
+    font-size: 0.9rem;
+  }
+  
+  .profile-content {
+    border-radius: var(--border-radius-lg);
+  }
+  
+  .error-state {
+    padding: 1.5rem 0.75rem;
+  }
+  
+  .error-state h2 {
+    font-size: 1.125rem;
+  }
+  
+  .error-state p {
+    font-size: 0.9rem;
+  }
+  
+  .retry-btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .profile-container {
+    padding: 0 0.125rem;
+  }
+  
+  .profile-header {
+    padding: 0.875rem 0.5rem;
+  }
+  
+  .profile-header h1 {
+    font-size: 1.375rem;
+  }
+  
+  .profile-header p {
+    font-size: 0.85rem;
+  }
+  
+  .error-state {
+    padding: 1.25rem 0.5rem;
+  }
+  
+  .error-state h2 {
     font-size: 1rem;
+  }
+  
+  .retry-btn {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.8rem;
   }
 }
 </style>

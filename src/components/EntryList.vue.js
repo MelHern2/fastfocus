@@ -36,8 +36,25 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['btn-edit']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn-delete']} */ ;
 /** @type {__VLS_StyleScopedClasses['entries-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-title']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-meta']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-footer']} */ ;
 /** @type {__VLS_StyleScopedClasses['entry-actions']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['entries-grid']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-title']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-meta']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-excerpt']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn']} */ ;
+/** @type {__VLS_StyleScopedClasses['tag']} */ ;
+/** @type {__VLS_StyleScopedClasses['status-badge']} */ ;
+/** @type {__VLS_StyleScopedClasses['featured-badge']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-title']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-meta']} */ ;
+/** @type {__VLS_StyleScopedClasses['entry-excerpt']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn']} */ ;
 // CSS variable injection 
 // CSS variable injection end 

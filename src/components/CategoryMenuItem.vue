@@ -4,19 +4,31 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <router-link 
-      :to="`/category/${category.id}`"
-      class="dropdown-item"
-      :class="`dropdown-item-level-${level}`"
-      @click="$emit('close-dropdown')"
-    >
-      <span class="category-name">{{ category.name }}</span>
-      <span v-if="hasChildren" class="dropdown-arrow-right">▶</span>
-    </router-link>
-    
-    <!-- SUBMENÚ RECURSIVO -->
     <div 
-      v-show="hasChildren && isHovered"
+      class="dropdown-item-container"
+      @click="hasChildren ? toggleExpanded() : null"
+    >
+      <router-link 
+        :to="`/category/${category.id}`"
+        class="dropdown-item"
+        :class="`dropdown-item-level-${level}`"
+        @click="$emit('close-dropdown')"
+      >
+        <span class="category-name">{{ category.name }}</span>
+      </router-link>
+      <span 
+        v-if="hasChildren" 
+        class="dropdown-arrow-right"
+        :class="{ 'expanded': isExpanded }"
+        @click.stop="toggleExpanded"
+      >
+        {{ isExpanded ? '▼' : '▶' }}
+      </span>
+    </div>
+    
+    <!-- SUBMENÚ RECURSIVO - En móvil se expande verticalmente -->
+    <div 
+      v-show="hasChildren && (isHovered || isExpanded)"
       class="dropdown-submenu"
       :class="`dropdown-submenu-level-${level + 1}`"
       @mouseenter="handleMouseEnter"
@@ -55,10 +67,17 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 const isHovered = ref(false)
+const isExpanded = ref(false)
 
 const hasChildren = computed(() => {
   return props.category.children && props.category.children.length > 0
 })
+
+const toggleExpanded = () => {
+  if (hasChildren.value) {
+    isExpanded.value = !isExpanded.value
+  }
+}
 
 const handleMouseEnter = () => {
   isHovered.value = true
@@ -187,11 +206,30 @@ const handleMouseLeave = () => {
   font-weight: 600;
 }
 
+.dropdown-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
 .dropdown-arrow-right {
   font-size: 0.75rem;
   color: var(--gray-400);
   transition: var(--transition-fast);
   margin-left: 0.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+}
+
+.dropdown-arrow-right.expanded {
+  transform: rotate(90deg);
+}
+
+.dropdown-arrow-right:hover {
+  background: var(--gray-100);
+  color: var(--primary-blue);
 }
 
 .dropdown-category:hover .dropdown-arrow-right {
@@ -215,6 +253,7 @@ const handleMouseLeave = () => {
   margin-left: 4px;
 }
 
+
 .dropdown-submenu-level-1 {
   z-index: 1001;
 }
@@ -234,6 +273,7 @@ const handleMouseLeave = () => {
 .dropdown-submenu-level-5 {
   z-index: 1005;
 }
+
 
 .dropdown-submenu-level-6 {
   z-index: 1006;
@@ -284,6 +324,26 @@ const handleMouseLeave = () => {
   
   .dropdown-submenu {
     margin-left: 0;
+  }
+}
+
+/* Regla específica para móvil - debe ir al final para mayor prioridad */
+@media (max-width: 768px) {
+  .dropdown-submenu {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    background: transparent !important;
+    border: none !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    min-width: auto !important;
+    width: auto !important;
+    z-index: auto !important;
+    padding: 0 !important;
+    margin-left: 1rem !important;
+    margin-top: 0.25rem !important;
+    transform: none !important;
   }
 }
 </style>

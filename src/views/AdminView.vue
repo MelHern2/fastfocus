@@ -105,7 +105,7 @@ const { confirm } = useConfirm()
 
 // Verificación simplificada de administrador
 const isAdmin = computed(() => {
-  return user.value && user.value.email === 'melanasdoblaktocas3@gmail.com'
+  return user.value && user.value.email === 'melenasdoblaktocas3@gmail.com'
 })
 const { 
   categories, 
@@ -344,10 +344,19 @@ const handleDeleteEntry = async (entry: Entry) => {
 }
 
 @media (max-width: 768px) {
+  .admin-view {
+    padding: 10px;
+  }
+  
   .admin-header {
     flex-direction: column;
     gap: 15px;
     text-align: center;
+    padding: 15px 20px;
+  }
+  
+  .admin-header h1 {
+    font-size: 1.5rem;
   }
   
   .admin-info {
@@ -355,10 +364,128 @@ const handleDeleteEntry = async (entry: Entry) => {
     gap: 10px;
   }
   
+  .admin-info p {
+    font-size: 0.9rem;
+  }
+  
+  .logout-btn {
+    padding: 6px 12px;
+    font-size: 0.875rem;
+  }
+  
+  .admin-tabs {
+    flex-direction: column;
+  }
+  
+  .tab-btn {
+    padding: 12px 20px;
+    font-size: 0.9rem;
+    border-bottom: none;
+    border-right: 3px solid transparent;
+  }
+  
+  .tab-btn.active {
+    border-bottom-color: transparent;
+    border-right-color: #667eea;
+  }
+  
+  .tab-content {
+    padding: 20px;
+  }
+  
   .section-header {
     flex-direction: column;
     gap: 15px;
     align-items: stretch;
+  }
+  
+  .add-btn {
+    width: 100%;
+    padding: 12px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .access-denied-content {
+    padding: 2rem 1.5rem;
+    margin: 1rem;
+  }
+  
+  .access-denied-content h2 {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-view {
+    padding: 5px;
+  }
+  
+  .admin-header {
+    padding: 12px 15px;
+  }
+  
+  .admin-header h1 {
+    font-size: 1.25rem;
+  }
+  
+  .admin-info p {
+    font-size: 0.8rem;
+  }
+  
+  .logout-btn {
+    padding: 5px 10px;
+    font-size: 0.8rem;
+  }
+  
+  .tab-btn {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .tab-content {
+    padding: 15px;
+  }
+  
+  .add-btn {
+    padding: 10px 15px;
+    font-size: 0.85rem;
+  }
+  
+  .access-denied-content {
+    padding: 1.5rem 1rem;
+    margin: 0.5rem;
+  }
+  
+  .access-denied-content h2 {
+    font-size: 1.125rem;
+  }
+  
+  .access-denied-content p {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .admin-header {
+    padding: 10px 12px;
+  }
+  
+  .admin-header h1 {
+    font-size: 1.125rem;
+  }
+  
+  .tab-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
+  }
+  
+  .tab-content {
+    padding: 12px;
+  }
+  
+  .add-btn {
+    padding: 8px 12px;
+    font-size: 0.8rem;
   }
 }
 

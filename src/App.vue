@@ -95,15 +95,14 @@ body::before {
 
 @media (max-width: 768px) {
   .main-content {
-    padding: 1rem;
+    padding: 0;
     margin: 0;
   }
 }
 
 @media (max-width: 480px) {
   .main-content {
-    padding-left: 1rem;
-    padding-right: 1rem;
+    padding: 0;
   }
 }
 </style>

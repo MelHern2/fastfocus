@@ -506,12 +506,17 @@ const resendVerification = async () => {
 @media (max-width: 768px) {
   .login-container {
     padding: 1rem;
-    min-height: 70vh;
+    min-height: 100vh;
+    align-items: flex-start;
+    padding-top: 2rem;
   }
   
   .login-card {
     padding: 2rem;
     border-radius: 16px;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 90vw;
   }
   
   .login-header h1 {
@@ -524,6 +529,7 @@ const resendVerification = async () => {
   
   .form-input {
     padding: 0.875rem 1rem;
+    font-size: 16px; /* Evita zoom en iOS */
   }
   
   .btn-primary,
@@ -536,11 +542,13 @@ const resendVerification = async () => {
 @media (max-width: 480px) {
   .login-container {
     padding: 0.5rem;
+    padding-top: 1rem;
   }
   
   .login-card {
     padding: 1.5rem;
     border-radius: 12px;
+    max-width: 95vw;
   }
   
   .login-header h1 {
@@ -553,7 +561,7 @@ const resendVerification = async () => {
   
   .form-input {
     padding: 0.75rem 0.875rem;
-    font-size: 0.95rem;
+    font-size: 16px; /* Evita zoom en iOS */
   }
   
   .btn-primary,
@@ -565,6 +573,40 @@ const resendVerification = async () => {
   .google-icon {
     width: 20px;
     height: 20px;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .error-message {
+    padding: 0.75rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-card {
+    padding: 1rem;
+    margin: 0.5rem;
+  }
+  
+  .login-header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .login-header p {
+    font-size: 0.85rem;
+  }
+  
+  .form-input {
+    padding: 0.625rem 0.75rem;
+  }
+  
+  .btn-primary,
+  .btn-google {
+    padding: 0.625rem 0.875rem;
+    font-size: 0.9rem;
   }
 }
 </style>

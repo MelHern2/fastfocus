@@ -12,7 +12,7 @@
         
         <!-- Menú desplegable de categorías -->
         <div class="dropdown-container" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-          <div class="nav-link dropdown-trigger">
+          <div class="nav-link dropdown-trigger" @click="toggleDropdown">
             Categorías
             <span class="dropdown-arrow">▼</span>
           </div>
@@ -47,16 +47,16 @@
         </template>
         
         <template v-else>
+          <!-- Botón de administración para usuarios admin -->
+          <router-link v-if="user && user.email && user.email.toLowerCase().trim() === 'melenasdoblaktocas3@gmail.com'" to="/admin" class="nav-link admin-link">
+            <span class="admin-icon">⚙️</span>
+            <span class="admin-text">Admin</span>
+          </router-link>
+          
           <!-- Botón para volver al index cuando estás en admin -->
           <router-link v-if="isAdminPage" to="/" class="nav-link back-link">
             <span class="back-icon">🏠</span>
             <span class="back-text">Volver al Inicio</span>
-          </router-link>
-          
-          <!-- Botón de administración para usuarios admin -->
-          <router-link v-else-if="user && user.email === 'melanasdoblaktocas3@gmail.com'" to="/admin" class="nav-link admin-link">
-            <span class="admin-icon">⚙️</span>
-            <span class="admin-text">Admin</span>
           </router-link>
           
           <div class="user-menu">
@@ -96,6 +96,11 @@ const isAdminPage = computed(() => {
   return route.path.startsWith('/admin')
 })
 
+// Función para toggle del dropdown
+const toggleDropdown = () => {
+  showDropdown.value = !showDropdown.value
+}
+
 
 // Debug para hover
 watch(hoveredCategory, (newVal) => {
@@ -128,30 +133,51 @@ onUnmounted(() => {
 })
 
 // Debug: verificar estado de admin
-console.log('NavBar - Usuario:', user.value?.email)
-console.log('NavBar - DisplayName:', user.value?.displayName)
-console.log('NavBar - Es admin:', isAdmin.value)
-console.log('NavBar - Email coincide:', user.value?.email === 'melenasdoblaktocas3@gmail.com')
-console.log('NavBar - Condición botón admin:', user.value && user.value.email === 'melenasdoblaktocas3@gmail.com')
+watch(user, (newUser) => {
+  console.log('NavBar - Usuario actualizado:', newUser)
+  console.log('NavBar - Email:', newUser?.email)
+  console.log('NavBar - Email tipo:', typeof newUser?.email)
+  console.log('NavBar - Email longitud:', newUser?.email?.length)
+  console.log('NavBar - Email charCodeAt:', newUser?.email?.split('').map(c => c.charCodeAt(0)))
+  console.log('NavBar - DisplayName:', newUser?.displayName)
+  console.log('NavBar - Es admin:', isAdmin.value)
+  console.log('NavBar - Email coincide exacto:', newUser?.email === 'melanasdoblaktocas3@gmail.com')
+  console.log('NavBar - Email coincide normalizado:', newUser?.email?.toLowerCase().trim() === 'melanasdoblaktocas3@gmail.com')
+  console.log('NavBar - Condición botón admin:', newUser && newUser.email && newUser.email.toLowerCase().trim() === 'melanasdoblaktocas3@gmail.com')
+  console.log('NavBar - Está en admin page:', isAdminPage.value)
+}, { immediate: true })
 </script>
 
 <style scoped>
 .navbar {
   background: linear-gradient(135deg, #ffffff 0%, var(--gray-50) 100%);
   box-shadow: var(--shadow-lg);
-  padding: 0.5rem 0;
+  padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
   border-bottom: 1px solid var(--gray-200);
+  width: 100%;
 }
 
 .nav-container {
   width: 100%;
-  padding: 0 1rem;
+  padding: 0.5rem 1rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+@media (max-width: 768px) {
+  .nav-container {
+    padding: 0.5rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0.5rem 0.25rem;
+  }
 }
 
 .nav-brand {
@@ -187,6 +213,7 @@ console.log('NavBar - Condición botón admin:', user.value && user.value.email 
   filter: drop-shadow(var(--shadow-md));
   transform: scale(1.05);
 }
+
 
 
 
@@ -458,11 +485,20 @@ console.log('NavBar - Condición botón admin:', user.value && user.value.email 
 
 @media (max-width: 768px) {
   .nav-container {
-    padding: 0 1rem;
+    padding: 0;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .nav-brand {
+    order: 1;
+    align-self: center;
   }
   
   .nav-logo {
-    height: 60px;
+    height: 50px;
   }
   
   .brand-link {
@@ -470,40 +506,106 @@ console.log('NavBar - Condición botón admin:', user.value && user.value.email 
   }
   
   .nav-menu {
-    gap: 1rem;
+    order: 2;
+    gap: 0.5rem;
     flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    align-items: center;
+  }
+  
+  .nav-link {
+    padding: 0.375rem 0.75rem;
+    font-size: 0.875rem;
   }
   
   .dropdown-menu {
-    position: fixed;
-    top: 80px;
+    position: absolute;
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 250px;
-    max-width: 90vw;
+    min-width: 150px;
+    max-width: 250px;
+    z-index: 1001;
+    margin: 0;
+    width: auto;
+    border-radius: 8px;
   }
   
   .dropdown-submenu {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 200px;
-    max-width: 80vw;
+    position: absolute;
+    top: 0;
+    left: 100%;
+    transform: none;
+    min-width: 150px;
+    max-width: 200px;
+    width: auto;
+    z-index: 1002;
   }
   
   .user-menu {
-    flex-direction: column;
+    flex-direction: row;
     gap: 0.5rem;
-    align-items: stretch;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
   }
   
-  .user-name {
-    text-align: center;
+  .profile-link {
+    font-size: 0.8rem;
+    padding: 0.375rem 0.75rem;
   }
   
   .logout-btn {
-    width: 100%;
+    font-size: 0.8rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .admin-link,
+  .back-link {
+    font-size: 0.8rem;
+    padding: 0.375rem 0.75rem;
+  }
+  
+  .admin-text,
+  .back-text {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-container {
+    padding: 0;
+  }
+  
+  .nav-logo {
+    height: 45px;
+  }
+  
+  .nav-menu {
+    gap: 0.25rem;
+  }
+  
+  .nav-link {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+  }
+  
+  .user-menu {
+    gap: 0.25rem;
+  }
+  
+  .profile-link,
+  .logout-btn,
+  .admin-link,
+  .back-link {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .dropdown-menu {
+    min-width: 250px;
+    max-width: 95vw;
   }
 }
 </style>

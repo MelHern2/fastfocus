@@ -52,27 +52,16 @@
           ></textarea>
         </div>
 
-        <!-- CAMPO DE PRUEBA -->
-        <div class="form-group" style="background-color: #ff0000; color: white; padding: 20px; border: 5px solid #000; margin: 20px 0;">
-          <h2 style="color: white; margin: 0 0 10px 0;">CAMPO DE PRUEBA - TIEMPO DE LECTURA</h2>
-          <input
-            type="text"
-            placeholder="ESTO DEBERÍA SER VISIBLE"
-            style="width: 100%; padding: 15px; font-size: 18px; border: 3px solid #000;"
-          />
-        </div>
-
-        <div class="form-group" style="background-color: #fef3c7; padding: 15px; border: 2px solid #f59e0b; border-radius: 8px; margin: 20px 0;">
-          <label for="estimatedReadingTime" style="color: #92400e; font-weight: bold; font-size: 16px;">Tiempo estimado de lectura</label>
+        <div class="form-group">
+          <label for="estimatedReadingTime">Tiempo estimado de lectura</label>
           <input
             id="estimatedReadingTime"
             v-model="formData.estimatedReadingTime"
             type="text"
             placeholder="Ej: 5 minutos, 10-15 min, etc. (opcional)"
             class="form-input"
-            style="border: 3px solid #f59e0b; background-color: #fffbeb; font-size: 16px; padding: 15px; margin-top: 10px;"
           />
-          <small class="form-help" style="color: #92400e; font-weight: 500; margin-top: 10px; display: block;">Si se deja vacío, se auto-rellenará con "Tiempo de lectura no estimado"</small>
+          <small class="form-help">Si se deja vacío, se auto-rellenará con "Tiempo de lectura no estimado"</small>
         </div>
 
         <div class="form-group">
@@ -516,22 +505,171 @@ onUnmounted(() => {
 }
 
 @media (max-width: 768px) {
-  .form-row {
-    grid-template-columns: 1fr;
-    gap: 0;
+  .entry-form-overlay {
+    padding: 10px;
+    align-items: flex-start;
+    padding-top: 20px;
   }
   
   .entry-form {
-    margin: 10px;
+    margin: 0;
     max-width: none;
+    width: 100%;
+    max-height: 95vh;
+    border-radius: 8px;
+  }
+  
+  .form-header {
+    padding: 15px 20px;
+  }
+  
+  .form-header h3 {
+    font-size: 1.125rem;
+  }
+  
+  .form-content {
+    padding: 20px;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 0;
+    margin-bottom: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 12px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+  
+  .quill-editor {
+    min-height: 250px;
   }
   
   .form-actions {
     flex-direction: column;
+    gap: 10px;
+    margin-top: 20px;
+    padding-top: 15px;
   }
   
   .btn {
     width: 100%;
+    padding: 12px 20px;
+    font-size: 16px; /* Evita zoom en iOS */
+  }
+  
+  .checkbox-group {
+    gap: 10px;
+  }
+  
+  .checkbox-label {
+    gap: 10px;
+  }
+  
+  .checkbox {
+    width: 18px;
+    height: 18px;
+  }
+  
+  .checkbox-text {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .entry-form-overlay {
+    padding: 5px;
+    padding-top: 10px;
+  }
+  
+  .entry-form {
+    border-radius: 6px;
+  }
+  
+  .form-header {
+    padding: 12px 15px;
+  }
+  
+  .form-header h3 {
+    font-size: 1rem;
+  }
+  
+  .form-content {
+    padding: 15px;
+  }
+  
+  .form-group {
+    margin-bottom: 12px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  .quill-editor {
+    min-height: 200px;
+  }
+  
+  .form-actions {
+    margin-top: 15px;
+    padding-top: 12px;
+  }
+  
+  .btn {
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+  
+  .tags-preview {
+    gap: 4px;
+  }
+  
+  .tag {
+    font-size: 0.7rem;
+    padding: 3px 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .entry-form-overlay {
+    padding: 2px;
+    padding-top: 5px;
+  }
+  
+  .form-header {
+    padding: 10px 12px;
+  }
+  
+  .form-content {
+    padding: 12px;
+  }
+  
+  .form-group {
+    margin-bottom: 10px;
+  }
+  
+  .form-input,
+  .form-textarea,
+  .form-select {
+    padding: 8px;
+  }
+  
+  .quill-editor {
+    min-height: 180px;
+  }
+  
+  .btn {
+    padding: 8px 12px;
   }
 }
 </style>

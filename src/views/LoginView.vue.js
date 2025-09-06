@@ -125,6 +125,14 @@ let __VLS_directives;
 /** @type {__VLS_StyleScopedClasses['btn-primary']} */ ;
 /** @type {__VLS_StyleScopedClasses['btn-google']} */ ;
 /** @type {__VLS_StyleScopedClasses['google-icon']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-group']} */ ;
+/** @type {__VLS_StyleScopedClasses['error-message']} */ ;
+/** @type {__VLS_StyleScopedClasses['login-card']} */ ;
+/** @type {__VLS_StyleScopedClasses['login-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['login-header']} */ ;
+/** @type {__VLS_StyleScopedClasses['form-input']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn-primary']} */ ;
+/** @type {__VLS_StyleScopedClasses['btn-google']} */ ;
 // CSS variable injection 
 // CSS variable injection end 
 __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
