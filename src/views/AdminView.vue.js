@@ -16,7 +16,7 @@ const { success, error: showError } = useToast();
 const { confirm } = useConfirm();
 // Verificación simplificada de administrador
 const isAdmin = computed(() => {
-    return user.value && user.value.email === 'melenasdoblaktocas3@gmail.com';
+    return user.value && user.value.email === 'melanasdoblaktocas3@gmail.com';
 });
 const { categories, loading, error, fetchCategories, createCategory, updateCategory, deleteCategory } = useCategories();
 const { entriesWithCategories, loading: entriesLoading, error: entriesError, fetchEntriesWithCategories, createEntry, updateEntry, deleteEntry } = useEntries();

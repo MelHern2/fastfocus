@@ -1,6 +1,6 @@
-# analisis
+# FastFocus
 
-This template should help get you started developing with Vue 3 in Vite.
+FastFocus es una aplicación de análisis y gestión de contenido desarrollada con Vue 3 y Vite.
 
 ## Recommended IDE Setup
 

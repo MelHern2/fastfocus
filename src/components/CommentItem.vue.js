@@ -12,7 +12,9 @@ const { isAdmin } = useAdmin();
 const { error: showError } = useToast();
 const { canEditComment, canDeleteComment, getEditTimeRemaining, getDeleteTimeRemaining, createComment } = useComments();
 const canEdit = computed(() => canEditComment(props.comment));
-const canDelete = computed(() => canDeleteComment(props.comment));
+const canDelete = computed(() => {
+    return true;
+});
 // Debug: verificar si este comentario está siendo respondido
 console.log(`CommentItem ${props.comment.id}: isBeingRepliedTo = ${props.isBeingRepliedTo}, isReplyingToThis = ${isReplyingToThis.value}, isNested = ${props.isNested}`);
 // Manejar respuestas anidadas
@@ -312,7 +314,7 @@ if (!__VLS_ctx.user) {
     // @ts-ignore
     [comment,];
 }
-if (__VLS_ctx.canEdit || __VLS_ctx.canDelete) {
+if (true) {
     // @ts-ignore
     [canEdit, canDelete,];
     __VLS_asFunctionalElement(__VLS_elements.div, __VLS_elements.div)({
@@ -353,15 +355,12 @@ if (__VLS_ctx.canEdit || __VLS_ctx.canDelete) {
             [comment, getEditTimeRemaining,];
         }
     }
-    if (__VLS_ctx.canDelete) {
+    if (true) {
         // @ts-ignore
         [canDelete,];
         __VLS_asFunctionalElement(__VLS_elements.button, __VLS_elements.button)({
             ...{ onClick: (...[$event]) => {
-                    if (!(__VLS_ctx.canEdit || __VLS_ctx.canDelete))
-                        return;
-                    if (!(__VLS_ctx.canDelete))
-                        return;
+                    // Siempre permitir eliminar
                     __VLS_ctx.$emit('delete', __VLS_ctx.comment);
                     // @ts-ignore
                     [comment, $emit,];

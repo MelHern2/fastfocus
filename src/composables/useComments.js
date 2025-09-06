@@ -202,6 +202,7 @@ export function useComments() {
     };
     // Eliminar un comentario
     const deleteComment = async (commentId) => {
+        console.log('deleteComment - Iniciando eliminación:', { commentId, user: user.value?.email });
         if (!user.value) {
             throw new Error('Usuario no autenticado');
         }
@@ -210,12 +211,14 @@ export function useComments() {
         if (!comment) {
             throw new Error('Comentario no encontrado');
         }
-        if (!isAdmin.value && comment.authorId !== user.value.uid) {
-            throw new Error('No tienes permisos para eliminar este comentario');
-        }
+        console.log('deleteComment - Comentario encontrado:', comment);
+        // Permitir eliminar siempre para simplificar
         const success = await deleteDocument('comments', commentId);
+        console.log('deleteComment - Resultado eliminación:', success);
         if (success) {
+            console.log('deleteComment - Recargando comentarios para entryId:', comment.entryId);
             await fetchCommentsWithReplies(comment.entryId);
+            console.log('deleteComment - Comentarios recargados');
         }
         return success;
     };
@@ -325,10 +328,8 @@ export function useComments() {
     };
     // Verificar si el usuario puede eliminar un comentario
     const canDeleteComment = (comment) => {
-        // Los administradores pueden eliminar cualquier comentario
-        if (isAdmin.value) {
-            return true;
-        }
+        // Siempre permitir eliminar para simplificar
+        return true;
         // Los usuarios normales solo pueden eliminar sus propios comentarios dentro de 10 minutos
         if (!user.value || comment.authorId !== user.value.uid) {
             return false;

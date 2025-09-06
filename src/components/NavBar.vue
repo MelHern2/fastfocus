@@ -54,7 +54,7 @@
           </router-link>
           
           <!-- Botón de administración para usuarios admin -->
-          <router-link v-else-if="user && user.email === 'melenasdoblaktocas3@gmail.com'" to="/admin" class="nav-link admin-link">
+          <router-link v-else-if="user && user.email === 'melanasdoblaktocas3@gmail.com'" to="/admin" class="nav-link admin-link">
             <span class="admin-icon">⚙️</span>
             <span class="admin-text">Admin</span>
           </router-link>

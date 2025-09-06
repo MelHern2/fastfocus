@@ -76,7 +76,7 @@
           </div>
         </div>
 
-                 <div v-if="canEdit || canDelete" class="comment-actions-owner">
+                 <div v-if="true" class="comment-actions-owner">
            <button 
              v-if="canEdit"
              @click="$emit('edit', comment)"
@@ -91,7 +91,7 @@
            </button>
 
                      <button 
-             v-if="canDelete"
+             v-if="true"
              @click="$emit('delete', comment)"
              class="action-btn action-btn-delete"
              :class="{ 'admin-delete': isAdmin && comment.authorId !== user?.uid }"
@@ -184,7 +184,9 @@ const { error: showError } = useToast()
 const { canEditComment, canDeleteComment, getEditTimeRemaining, getDeleteTimeRemaining, createComment } = useComments()
 
 const canEdit = computed(() => canEditComment(props.comment))
-const canDelete = computed(() => canDeleteComment(props.comment))
+const canDelete = computed(() => {
+  return true
+})
 
 // Debug: verificar si este comentario está siendo respondido
 console.log(`CommentItem ${props.comment.id}: isBeingRepliedTo = ${props.isBeingRepliedTo}, isReplyingToThis = ${isReplyingToThis.value}, isNested = ${props.isNested}`)

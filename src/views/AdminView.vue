@@ -105,7 +105,7 @@ const { confirm } = useConfirm()
 
 // Verificación simplificada de administrador
 const isAdmin = computed(() => {
-  return user.value && user.value.email === 'melenasdoblaktocas3@gmail.com'
+  return user.value && user.value.email === 'melanasdoblaktocas3@gmail.com'
 })
 const { 
   categories, 

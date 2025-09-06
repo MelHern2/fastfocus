@@ -7,7 +7,23 @@ export function useAdmin() {
     const userProfile = ref(null);
     const loading = ref(false);
     // Email del administrador
-    const ADMIN_EMAIL = 'melenasdoblaktocas3@gmail.com';
+    const ADMIN_EMAIL = 'melanasdoblaktocas3@gmail.com';
+    
+    // Función para verificar si un email es de administrador (más flexible)
+    const isAdminEmail = (email) => {
+        if (!email)
+            return false;
+        const cleanEmail = email.trim().toLowerCase();
+        const cleanAdminEmail = ADMIN_EMAIL.trim().toLowerCase();
+        console.log('isAdminEmail check:', {
+            originalEmail: email,
+            cleanEmail,
+            adminEmail: ADMIN_EMAIL,
+            cleanAdminEmail,
+            matches: cleanEmail === cleanAdminEmail
+        });
+        return cleanEmail === cleanAdminEmail;
+    };
     // Cargar perfil del usuario cuando cambie
     watch(user, async (newUser) => {
         console.log('useAdmin - Usuario cambió:', newUser?.email);
@@ -35,17 +51,20 @@ export function useAdmin() {
     }, { immediate: true });
     // Verificar si el usuario actual es administrador
     const isAdmin = computed(() => {
+        console.log('useAdmin - Computed isAdmin ejecutándose:', {
+            user: user.value,
+            userEmail: user.value?.email,
+            loading: loading.value
+        });
+        
         if (!user.value?.email) {
             console.log('useAdmin - No hay email de usuario');
             return false;
         }
         // Verificar por email primero (más confiable)
-        const emailCheck = user.value.email?.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim();
+        const emailCheck = isAdminEmail(user.value.email);
         console.log('useAdmin - Verificación por email:', {
             userEmail: user.value.email,
-            userEmailTrimmed: user.value.email?.toLowerCase().trim(),
-            adminEmail: ADMIN_EMAIL,
-            adminEmailTrimmed: ADMIN_EMAIL.toLowerCase().trim(),
             emailCheck
         });
         if (emailCheck) {
@@ -90,7 +109,7 @@ export function useAdmin() {
             return false;
         }
         // Si es admin por email, permitir acceso inmediatamente
-        if (user.value?.email?.toLowerCase().trim() === ADMIN_EMAIL.toLowerCase().trim()) {
+        if (isAdminEmail(user.value?.email)) {
             console.log('useAdmin - Admin por email, acceso permitido');
             return true;
         }

@@ -177,10 +177,13 @@ export function useFirestore() {
     error.value = null
     
     try {
+      console.log('deleteDocument - Eliminando:', { collectionName, docId })
       const docRef = doc(db, collectionName, docId)
       await deleteDoc(docRef)
+      console.log('deleteDocument - Eliminado exitosamente')
       return true
     } catch (err) {
+      console.error('deleteDocument - Error:', err)
       error.value = `Error al eliminar documento: ${err}`
       return false
     } finally {

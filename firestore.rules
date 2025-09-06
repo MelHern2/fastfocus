@@ -4,7 +4,7 @@ service cloud.firestore {
     // Función para verificar si el usuario es administrador
     function isAdmin() {
       return request.auth != null && 
-             (request.auth.token.email == 'melenasdoblaktocas3@gmail.com' ||
+             (request.auth.token.email == 'melanasdoblaktocas3@gmail.com' ||
               get(/databases/$(database)/documents/users/$(request.auth.uid)).data.isAdmin == true);
     }
     
@@ -43,9 +43,9 @@ service cloud.firestore {
       // Permitir creación a usuarios autenticados
       allow create: if request.auth != null;
       
-      // Permitir actualización y eliminación solo al autor del comentario
+      // Permitir actualización y eliminación al autor del comentario o a administradores
       allow update, delete: if request.auth != null && 
-                           request.auth.uid == resource.data.authorId;
+                           (request.auth.uid == resource.data.authorId || isAdmin());
     }
     
     // Reglas para perfiles de usuario

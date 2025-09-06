@@ -48,8 +48,8 @@ onUnmounted(() => {
 console.log('NavBar - Usuario:', user.value?.email);
 console.log('NavBar - DisplayName:', user.value?.displayName);
 console.log('NavBar - Es admin:', isAdmin.value);
-console.log('NavBar - Email coincide:', user.value?.email === 'melenasdoblaktocas3@gmail.com');
-console.log('NavBar - Condición botón admin:', user.value && user.value.email === 'melenasdoblaktocas3@gmail.com');
+console.log('NavBar - Email coincide:', user.value?.email === 'melanasdoblaktocas3@gmail.com');
+console.log('NavBar - Condición botón admin:', user.value && user.value.email === 'melanasdoblaktocas3@gmail.com');
 debugger; /* PartiallyEnd: #3632/scriptSetup.vue */
 const __VLS_ctx = {};
 let __VLS_elements;
@@ -283,7 +283,7 @@ else {
         });
         var __VLS_34;
     }
-    else if (__VLS_ctx.user && __VLS_ctx.user.email === 'melenasdoblaktocas3@gmail.com') {
+    else if (__VLS_ctx.user && __VLS_ctx.user.email === 'melanasdoblaktocas3@gmail.com') {
         // @ts-ignore
         [user, user,];
         const __VLS_36 = {}.RouterLink;

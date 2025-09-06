@@ -403,6 +403,8 @@ const handleEditSubmit = async () => {
 
 // Eliminar comentario
 const handleDelete = async (comment: CommentWithReplies) => {
+  console.log('handleDelete - Iniciando eliminación:', comment)
+  
   const confirmed = await confirm({
     title: 'Eliminar comentario',
     message: '¿Estás seguro de que quieres eliminar este comentario?',
@@ -411,14 +413,19 @@ const handleDelete = async (comment: CommentWithReplies) => {
     type: 'danger'
   })
   
-  if (!confirmed) return
+  if (!confirmed) {
+    console.log('handleDelete - Usuario canceló')
+    return
+  }
 
   try {
-    await deleteComment(comment.id)
+    console.log('handleDelete - Llamando a deleteComment')
+    const result = await deleteComment(comment.id)
+    console.log('handleDelete - Resultado:', result)
     success('Comentario eliminado correctamente')
   } catch (error) {
-    console.error('Error al eliminar comentario:', error)
-    showError('Error al eliminar el comentario')
+    console.error('handleDelete - Error:', error)
+    showError('Error al eliminar el comentario: ' + error.message)
   }
 }
 
