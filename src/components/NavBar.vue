@@ -578,7 +578,7 @@ watch(user, (newUser) => {
   color: var(--gray-700) !important;
   text-decoration: none !important;
   background-color: transparent !important;
-  padding: 0 !important;
+  padding: 0.75rem 1rem !important;
   display: block;
   width: 100%;
 }
@@ -598,7 +598,7 @@ watch(user, (newUser) => {
 .dropdown-submenu a {
   color: var(--gray-700) !important;
   background-color: transparent !important;
-  padding: 0 !important;
+  padding: 0.75rem 1rem !important;
   display: block;
   width: 100%;
 }
