@@ -9,7 +9,7 @@
         :to="`/category/${category.id}`"
         class="dropdown-item"
         :class="`dropdown-item-level-${level}`"
-        @click="$emit('close-dropdown')"
+        @click="handleCategoryClick"
       >
         <span class="category-name">{{ category.name }}</span>
       </router-link>
@@ -87,6 +87,11 @@ const handleMouseLeave = () => {
   setTimeout(() => {
     isHovered.value = false
   }, 100)
+}
+
+const handleCategoryClick = () => {
+  console.log('Category clicked:', props.category.id, props.category.name)
+  emit('close-dropdown')
 }
 
 </script>

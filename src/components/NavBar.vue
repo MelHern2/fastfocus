@@ -144,7 +144,21 @@ const loadCategoriesTree = async () => {
     console.log('Categorías con hijos:', categoriesTree.value.filter(cat => cat.children && cat.children.length > 0))
   } catch (error) {
     console.error('Error al cargar categorías:', error)
-    categoriesTree.value = []
+    // Datos de prueba si falla la carga
+    categoriesTree.value = [
+      {
+        id: 'test-historia',
+        name: 'Historia',
+        children: [
+          {
+            id: 'test-politica',
+            name: 'Política',
+            children: []
+          }
+        ]
+      }
+    ]
+    console.log('Usando categorías de prueba:', categoriesTree.value)
   }
 }
 
