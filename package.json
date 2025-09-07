@@ -11,7 +11,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "build-only": "vite build",
-    "type-check": "vue-tsc --build"
+    "type-check": "vue-tsc --build",
+    "vercel-build": "npm run build"
   },
   "dependencies": {
     "@firebase/auth": "^1.11.0",
