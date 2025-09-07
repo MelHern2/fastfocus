@@ -538,6 +538,18 @@ watch(user, (newUser) => {
   border-left-color: var(--primary-blue);
 }
 
+/* Forzar estilos específicos para el dropdown */
+.dropdown-menu .dropdown-item {
+  color: var(--gray-700) !important;
+  background: var(--gray-50) !important;
+  padding: 0.75rem 1rem !important;
+}
+
+.dropdown-menu .dropdown-item:hover {
+  color: var(--primary-blue) !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
 .dropdown-arrow-right {
   font-size: 0.75rem;
   color: var(--gray-400);

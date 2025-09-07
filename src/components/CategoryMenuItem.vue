@@ -9,7 +9,7 @@
         :to="`/category/${category.id}`"
         class="dropdown-item"
         :class="`dropdown-item-level-${level}`"
-        @click="emit('close-dropdown')"
+        @click.native="emit('close-dropdown')"
       >
         <span class="category-name">{{ category.name }}</span>
       </router-link>
