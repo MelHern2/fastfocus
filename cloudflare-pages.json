@@ -1,7 +1,0 @@
-{
-  "buildCommand": "npm run build",
-  "outputDirectory": "dist",
-  "rootDirectory": ".",
-  "framework": "vue",
-  "nodeVersion": "20"
-}

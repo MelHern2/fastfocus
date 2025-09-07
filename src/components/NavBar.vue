@@ -137,28 +137,48 @@ watch(hoveredCategory, (newVal) => {
 
 // Cargar categorías y construir árbol
 const loadCategoriesTree = async () => {
+  // Usar datos estáticos temporalmente para probar
+  categoriesTree.value = [
+    {
+      id: 'historia',
+      name: 'Historia',
+      children: [
+        {
+          id: 'politica',
+          name: 'Política',
+          children: []
+        },
+        {
+          id: 'economia',
+          name: 'Economía',
+          children: []
+        }
+      ]
+    },
+    {
+      id: 'ciencia',
+      name: 'Ciencia',
+      children: [
+        {
+          id: 'tecnologia',
+          name: 'Tecnología',
+          children: []
+        }
+      ]
+    }
+  ]
+  console.log('Usando categorías estáticas:', categoriesTree.value)
+  
+  // Intentar cargar desde Firestore en segundo plano
   try {
     await fetchCategories()
-    categoriesTree.value = buildCategoryTree()
-    console.log('Categorías cargadas:', categoriesTree.value)
-    console.log('Categorías con hijos:', categoriesTree.value.filter(cat => cat.children && cat.children.length > 0))
+    const firestoreCategories = buildCategoryTree()
+    if (firestoreCategories.length > 0) {
+      categoriesTree.value = firestoreCategories
+      console.log('Categorías de Firestore cargadas:', categoriesTree.value)
+    }
   } catch (error) {
-    console.error('Error al cargar categorías:', error)
-    // Datos de prueba si falla la carga
-    categoriesTree.value = [
-      {
-        id: 'test-historia',
-        name: 'Historia',
-        children: [
-          {
-            id: 'test-politica',
-            name: 'Política',
-            children: []
-          }
-        ]
-      }
-    ]
-    console.log('Usando categorías de prueba:', categoriesTree.value)
+    console.error('Error al cargar categorías de Firestore:', error)
   }
 }
 
