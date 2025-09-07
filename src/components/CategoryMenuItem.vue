@@ -112,6 +112,8 @@ const handleMouseLeave = () => {
   transition: var(--transition-fast);
   border-left: 3px solid transparent;
   white-space: nowrap;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* Estilos por nivel dinámicos */
@@ -192,7 +194,7 @@ const handleMouseLeave = () => {
 }
 
 /* Hover effects */
-.dropdown-item:hover {
+.dropdown-category:hover .dropdown-item {
   background: var(--primary-blue-50);
   color: var(--primary-blue);
   border-left-color: var(--primary-blue);

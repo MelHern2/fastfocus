@@ -18,19 +18,27 @@
           </div>
           <div v-show="showDropdown" class="dropdown-menu" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
             <div class="dropdown-content">
-              <div class="dropdown-category" @mouseenter="showSubmenu = true" @mouseleave="showSubmenu = false">
-                <div class="dropdown-item-container">
-                  <a href="#" class="dropdown-item" @click="closeDropdown">
-                    Historia
-                  </a>
-                  <span class="dropdown-arrow-right" :class="{ 'expanded': showSubmenu }">▶</span>
-                </div>
-                <div v-show="showSubmenu" class="dropdown-submenu">
-                  <div class="dropdown-item">
-                    <a href="#" @click="closeDropdown">Política</a>
-                  </div>
-                </div>
+              <!-- Estado de carga -->
+              <div v-if="loading" class="dropdown-loading">
+                <div class="loading-spinner"></div>
+                <span>Cargando categorías...</span>
               </div>
+              
+              <!-- Estado vacío -->
+              <div v-else-if="categoriesTree.length === 0" class="dropdown-empty">
+                No hay categorías disponibles
+              </div>
+              
+              <!-- Lista de categorías -->
+              <template v-else>
+                <CategoryMenuItem 
+                  v-for="category in categoriesTree" 
+                  :key="category.id"
+                  :category="category"
+                  :level="0"
+                  @close-dropdown="closeDropdown"
+                />
+              </template>
             </div>
           </div>
         </div>
@@ -562,6 +570,8 @@ watch(user, (newUser) => {
   font-size: 0.875rem;
   color: var(--gray-700) !important;
   border-left: none;
+  width: 100%;
+  display: block;
 }
 
 .dropdown-submenu .dropdown-item a {
@@ -569,11 +579,14 @@ watch(user, (newUser) => {
   text-decoration: none !important;
   background-color: transparent !important;
   padding: 0 !important;
+  display: block;
+  width: 100%;
 }
 
 .dropdown-submenu .dropdown-item:hover {
   color: var(--primary-blue) !important;
   background: rgba(59, 130, 246, 0.1) !important;
+  width: 100%;
 }
 
 .dropdown-submenu .dropdown-item:hover a {
@@ -586,11 +599,14 @@ watch(user, (newUser) => {
   color: var(--gray-700) !important;
   background-color: transparent !important;
   padding: 0 !important;
+  display: block;
+  width: 100%;
 }
 
 .dropdown-submenu a:hover {
   color: var(--primary-blue) !important;
   background-color: rgba(59, 130, 246, 0.1) !important;
+  width: 100%;
 }
 
 
