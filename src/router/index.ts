@@ -7,7 +7,7 @@ import { getDoc, doc } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory('/'),
   routes: [
     {
       path: '/',
