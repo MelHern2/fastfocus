@@ -4,10 +4,7 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <div 
-      class="dropdown-item-container"
-      @click="hasChildren ? toggleExpanded() : null"
-    >
+    <div class="dropdown-item-container">
       <router-link 
         :to="`/category/${category.id}`"
         class="dropdown-item"
@@ -65,6 +62,9 @@ interface Emits {
 
 const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
+
+// Debug para verificar los datos
+console.log('CategoryMenuItem props:', props.category)
 
 const isHovered = ref(false)
 const isExpanded = ref(false)
