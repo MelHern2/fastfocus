@@ -11,27 +11,26 @@
         <router-link to="/" class="nav-link">Inicio</router-link>
         
         <!-- Menú desplegable de categorías -->
-        <div class="dropdown-container" @mouseenter="showDropdown = true" @mouseleave="showDropdown = false">
-          <div class="nav-link dropdown-trigger" @click="toggleDropdown">
+        <div class="dropdown-container" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+          <div class="nav-link dropdown-trigger">
             Categorías
-            <span class="dropdown-arrow">▼</span>
+            <span class="dropdown-arrow" :class="{ 'rotated': showDropdown }">▼</span>
           </div>
-          <div v-if="showDropdown" class="dropdown-menu">
-            <div v-if="loading" class="dropdown-loading">
-              <div class="loading-spinner"></div>
-              <span>Cargando categorías...</span>
-            </div>
-            <div v-else-if="categoriesTree.length === 0" class="dropdown-empty">
-              No hay categorías disponibles
-            </div>
-            <div v-else class="dropdown-content">
-              <CategoryMenuItem 
-                v-for="category in categoriesTree" 
-                :key="category.id"
-                :category="category"
-                :level="0"
-                @close-dropdown="showDropdown = false"
-              />
+          <div v-show="showDropdown" class="dropdown-menu" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
+            <div class="dropdown-content">
+              <div class="dropdown-category" @mouseenter="showSubmenu = true" @mouseleave="showSubmenu = false">
+                <div class="dropdown-item-container">
+                  <a href="#" class="dropdown-item" @click="closeDropdown">
+                    Historia
+                  </a>
+                  <span class="dropdown-arrow-right" :class="{ 'expanded': showSubmenu }">▶</span>
+                </div>
+                <div v-show="showSubmenu" class="dropdown-submenu">
+                  <div class="dropdown-item">
+                    <a href="#" @click="closeDropdown">Política</a>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -87,18 +86,39 @@ const { isAdmin } = useAdmin()
 const { categories, loading, fetchCategories, buildCategoryTree } = useCategories()
 
 const showDropdown = ref(false)
+const showSubmenu = ref(false)
 const categoriesTree = ref<CategoryTree[]>([])
 const hoveredCategory = ref(null)
 let hoverTimeout: number | null = null
+let leaveTimeout: number | null = null
+
+// Debug inicial
+console.log('NavBar mounted, showDropdown initial:', showDropdown.value)
 
 // Detectar si estamos en la página de admin
 const isAdminPage = computed(() => {
   return route.path.startsWith('/admin')
 })
 
-// Función para toggle del dropdown
-const toggleDropdown = () => {
-  showDropdown.value = !showDropdown.value
+// Manejar entrada del mouse
+const handleMouseEnter = () => {
+  if (leaveTimeout) {
+    clearTimeout(leaveTimeout)
+    leaveTimeout = null
+  }
+  showDropdown.value = true
+}
+
+// Manejar salida del mouse
+const handleMouseLeave = () => {
+  leaveTimeout = setTimeout(() => {
+    showDropdown.value = false
+  }, 500) // 500ms de delay
+}
+
+// Cerrar dropdown
+const closeDropdown = () => {
+  showDropdown.value = false
 }
 
 
@@ -125,10 +145,13 @@ onMounted(async () => {
   await loadCategoriesTree()
 })
 
-// Limpiar timeout al desmontar
+// Limpiar timeouts al desmontar
 onUnmounted(() => {
   if (hoverTimeout) {
     clearTimeout(hoverTimeout)
+  }
+  if (leaveTimeout) {
+    clearTimeout(leaveTimeout)
   }
 })
 
@@ -150,33 +173,41 @@ watch(user, (newUser) => {
 
 <style scoped>
 .navbar {
-  background: linear-gradient(135deg, #ffffff 0%, var(--gray-50) 100%);
-  box-shadow: var(--shadow-lg);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
   padding: 0;
   position: sticky;
   top: 0;
   z-index: 100;
-  border-bottom: 1px solid var(--gray-200);
   width: 100%;
+  transition: all 0.3s ease;
 }
 
 .nav-container {
   width: 100%;
-  padding: 0.5rem 1rem;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 1rem 2rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 2rem;
 }
 
 @media (max-width: 768px) {
   .nav-container {
-    padding: 0.5rem 0.5rem;
+    padding: 0.75rem 1rem;
+    gap: 1rem;
   }
 }
 
 @media (max-width: 480px) {
   .nav-container {
-    padding: 0.5rem 0.25rem;
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
   }
 }
 
@@ -188,30 +219,32 @@ watch(user, (newUser) => {
 .brand-link {
   color: var(--primary-blue);
   text-decoration: none;
-  transition: var(--transition-normal);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
-  padding: 0.5rem;
-  border-radius: var(--border-radius-xl);
+  padding: 0.75rem 1rem;
+  border-radius: 16px;
+  position: relative;
+  background: transparent;
 }
 
 .brand-link:hover {
   color: var(--primary-blue-light);
+  background: rgba(59, 130, 246, 0.1);
   transform: translateY(-2px);
-  background: var(--primary-blue-50);
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
 }
 
 .nav-logo {
-  height: 50px;
+  height: 48px;
   width: auto;
-  transition: var(--transition-normal);
-  filter: drop-shadow(var(--shadow-sm));
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.1));
 }
 
 .brand-link:hover .nav-logo {
-  filter: drop-shadow(var(--shadow-md));
-  transform: scale(1.05);
+  filter: drop-shadow(0 8px 16px rgba(59, 130, 246, 0.2));
+  transform: scale(1.08) rotate(2deg);
 }
 
 
@@ -219,35 +252,45 @@ watch(user, (newUser) => {
 
 .nav-menu {
   display: flex;
-  gap: 2rem;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .nav-link {
   color: var(--gray-600);
   text-decoration: none;
   font-weight: 500;
-  transition: var(--transition-fast);
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   position: relative;
+  white-space: nowrap;
+  background: transparent;
 }
 
 .nav-link:hover {
   color: var(--primary-blue);
-  background: var(--primary-blue-50);
-  transform: translateY(-1px);
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
 }
 
 .nav-link.router-link-active {
   color: var(--primary-blue);
-  background: var(--primary-blue-100);
+  background: rgba(59, 130, 246, 0.15);
   font-weight: 600;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 .user-menu {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
+  padding: 0.5rem;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .profile-link {
@@ -256,14 +299,17 @@ watch(user, (newUser) => {
   font-weight: 500;
   font-size: 0.875rem;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  border-radius: 10px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  background: transparent;
 }
 
 .profile-link:hover {
   color: #667eea;
   background: rgba(102, 126, 234, 0.1);
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
 }
 
 .user-name {
@@ -273,24 +319,24 @@ watch(user, (newUser) => {
 }
 
 .logout-btn {
-  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  border: 1px solid #d1d5db;
-  color: #6b7280;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  color: #dc2626;
   padding: 0.5rem 1rem;
-  border-radius: 8px;
+  border-radius: 10px;
   font-size: 0.875rem;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(239, 68, 68, 0.1);
 }
 
 .logout-btn:hover {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  border-color: #fca5a5;
-  color: #dc2626;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(220, 38, 38, 0.15);
+  background: rgba(239, 68, 68, 0.2);
+  border-color: rgba(239, 68, 68, 0.3);
+  color: #b91c1c;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
 }
 
 /* Estilos para el botón de administración */
@@ -300,17 +346,18 @@ watch(user, (newUser) => {
   gap: 0.5rem;
   background: linear-gradient(135deg, #667eea 0%, #5a67d8 100%);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   font-weight: 500;
-  transition: all 0.2s ease;
-  box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  position: relative;
 }
 
 .admin-link:hover {
   background: linear-gradient(135deg, #5a67d8 0%, #4c51bf 100%);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
 }
 
 .admin-icon {
@@ -326,19 +373,20 @@ watch(user, (newUser) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, var(--success) 0%, var(--success-dark) 100%);
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: white;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-lg);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   font-weight: 500;
-  transition: var(--transition-fast);
-  box-shadow: var(--shadow-sm);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+  position: relative;
 }
 
 .back-link:hover {
-  background: linear-gradient(135deg, var(--success-dark) 0%, #047857 100%);
-  transform: translateY(-1px);
-  box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, #059669 0%, #047857 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
 }
 
 .back-icon {
@@ -360,27 +408,37 @@ watch(user, (newUser) => {
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
-  padding: 0.5rem 1rem;
-  border-radius: var(--border-radius-lg);
-  transition: var(--transition-fast);
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
   position: relative;
+  background: transparent;
+  width: 100%;
+  min-width: 120px;
 }
 
 .dropdown-trigger:hover {
   color: var(--primary-blue);
-  background: var(--primary-blue-50);
-  transform: translateY(-1px);
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.15);
 }
 
 .dropdown-trigger.router-link-active {
   color: var(--primary-blue);
-  background: var(--primary-blue-100);
+  background: rgba(59, 130, 246, 0.15);
   font-weight: 600;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
 .dropdown-arrow {
   font-size: 0.75rem;
-  transition: var(--transition-fast);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform-origin: center;
+}
+
+.dropdown-arrow.rotated {
+  transform: rotate(180deg);
 }
 
 .dropdown-container:hover .dropdown-arrow {
@@ -391,21 +449,24 @@ watch(user, (newUser) => {
   position: absolute;
   top: 100%;
   left: 0;
-  background: linear-gradient(145deg, #ffffff 0%, var(--gray-50) 100%);
-  border: 2px solid var(--gray-200);
-  border-radius: var(--border-radius-xl);
-  box-shadow: var(--shadow-xl);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   min-width: 200px;
   z-index: 1000;
   overflow: visible;
   animation: dropdownFadeIn 0.2s ease-out;
+  margin-top: 0.25rem;
 }
 
 .dropdown-loading {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
   color: var(--gray-600);
   font-size: 0.875rem;
 }
@@ -420,7 +481,7 @@ watch(user, (newUser) => {
 }
 
 .dropdown-empty {
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   color: var(--gray-500);
   font-size: 0.875rem;
   text-align: center;
@@ -428,8 +489,108 @@ watch(user, (newUser) => {
 }
 
 .dropdown-content {
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
   overflow: visible;
+}
+
+.dropdown-category {
+  position: relative;
+}
+
+.dropdown-item-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.dropdown-item {
+  color: var(--gray-700);
+  text-decoration: none;
+  font-size: 0.875rem;
+  padding: 0.75rem 1rem;
+  display: block;
+  transition: all 0.2s ease;
+  border-left: 3px solid transparent;
+  background: var(--gray-50);
+  font-weight: 600;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.dropdown-item:hover {
+  color: var(--primary-blue);
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: var(--primary-blue);
+}
+
+.dropdown-category:hover .dropdown-item {
+  color: var(--primary-blue);
+  background: rgba(59, 130, 246, 0.1);
+  border-left-color: var(--primary-blue);
+}
+
+.dropdown-arrow-right {
+  font-size: 0.75rem;
+  color: var(--gray-400);
+  margin-left: 0.5rem;
+  cursor: pointer;
+  padding: 0.25rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.dropdown-arrow-right:hover {
+  background: var(--gray-100);
+  color: var(--primary-blue);
+}
+
+.dropdown-arrow-right.expanded {
+  transform: rotate(90deg);
+}
+
+.dropdown-submenu {
+  background: rgba(255, 255, 255, 0.95);
+  border-left: 3px solid var(--primary-blue);
+  margin-left: 1rem;
+}
+
+.dropdown-submenu .dropdown-item {
+  background: transparent !important;
+  font-weight: 500;
+  padding-left: 1.5rem;
+  font-size: 0.875rem;
+  color: var(--gray-700) !important;
+  border-left: none;
+}
+
+.dropdown-submenu .dropdown-item a {
+  color: var(--gray-700) !important;
+  text-decoration: none !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+.dropdown-submenu .dropdown-item:hover {
+  color: var(--primary-blue) !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
+.dropdown-submenu .dropdown-item:hover a {
+  color: var(--primary-blue) !important;
+  background-color: transparent !important;
+}
+
+/* Sobrescribir CSS global que aplica color verde a los enlaces */
+.dropdown-submenu a {
+  color: var(--gray-700) !important;
+  background-color: transparent !important;
+  padding: 0 !important;
+}
+
+.dropdown-submenu a:hover {
+  color: var(--primary-blue) !important;
+  background-color: rgba(59, 130, 246, 0.1) !important;
 }
 
 
@@ -453,39 +614,39 @@ watch(user, (newUser) => {
 /* Responsive */
 @media (min-width: 1600px) {
   .nav-container {
-    padding: 0 2rem;
+    padding: 1.25rem 3rem;
   }
   
   .nav-logo {
-    height: 60px;
+    height: 56px;
   }
 }
 
 @media (min-width: 1400px) and (max-width: 1599px) {
   .nav-container {
-    padding: 0 1.5rem;
+    padding: 1rem 2.5rem;
   }
   
-  .nav-logo {
-    height: 55px;
-  }
-}
-
-@media (min-width: 1200px) and (max-width: 1399px) {
   .nav-logo {
     height: 52px;
   }
 }
 
+@media (min-width: 1200px) and (max-width: 1399px) {
+  .nav-logo {
+    height: 50px;
+  }
+}
+
 @media (min-width: 992px) and (max-width: 1199px) {
   .nav-logo {
-    height: 75px;
+    height: 48px;
   }
 }
 
 @media (max-width: 768px) {
   .nav-container {
-    padding: 0;
+    padding: 0.75rem 1rem;
     flex-direction: column;
     gap: 1rem;
     align-items: center;
@@ -498,11 +659,11 @@ watch(user, (newUser) => {
   }
   
   .nav-logo {
-    height: 50px;
+    height: 44px;
   }
   
   .brand-link {
-    padding: 0.25rem;
+    padding: 0.5rem;
   }
   
   .nav-menu {
@@ -515,7 +676,7 @@ watch(user, (newUser) => {
   }
   
   .nav-link {
-    padding: 0.375rem 0.75rem;
+    padding: 0.5rem 1rem;
     font-size: 0.875rem;
   }
   
@@ -524,23 +685,35 @@ watch(user, (newUser) => {
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    min-width: 150px;
-    max-width: 250px;
+    min-width: 180px;
+    max-width: 280px;
     z-index: 1001;
-    margin: 0;
+    margin-top: 0.25rem;
     width: auto;
     border-radius: 8px;
   }
   
   .dropdown-submenu {
-    position: absolute;
-    top: 0;
-    left: 100%;
-    transform: none;
-    min-width: 150px;
-    max-width: 200px;
-    width: auto;
-    z-index: 1002;
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    min-width: auto !important;
+    max-width: none !important;
+    width: auto !important;
+    z-index: auto !important;
+    background: transparent !important;
+    border-left: none !important;
+    margin-left: 0 !important;
+    padding: 0 !important;
+  }
+  
+  .dropdown-submenu .dropdown-item {
+    padding-left: 1rem !important;
+    font-size: 0.8rem !important;
+    background: rgba(59, 130, 246, 0.05) !important;
+    margin: 0.25rem 0 !important;
+    border-radius: 4px !important;
   }
   
   .user-menu {
@@ -549,6 +722,7 @@ watch(user, (newUser) => {
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    padding: 0.375rem;
   }
   
   .profile-link {
@@ -564,7 +738,7 @@ watch(user, (newUser) => {
   .admin-link,
   .back-link {
     font-size: 0.8rem;
-    padding: 0.375rem 0.75rem;
+    padding: 0.5rem 1rem;
   }
   
   .admin-text,
@@ -575,11 +749,11 @@ watch(user, (newUser) => {
 
 @media (max-width: 480px) {
   .nav-container {
-    padding: 0;
+    padding: 0.5rem 0.75rem;
   }
   
   .nav-logo {
-    height: 45px;
+    height: 40px;
   }
   
   .nav-menu {
@@ -587,12 +761,13 @@ watch(user, (newUser) => {
   }
   
   .nav-link {
-    padding: 0.25rem 0.5rem;
+    padding: 0.375rem 0.75rem;
     font-size: 0.8rem;
   }
   
   .user-menu {
     gap: 0.25rem;
+    padding: 0.25rem;
   }
   
   .profile-link,
@@ -600,12 +775,13 @@ watch(user, (newUser) => {
   .admin-link,
   .back-link {
     font-size: 0.75rem;
-    padding: 0.25rem 0.5rem;
+    padding: 0.375rem 0.75rem;
   }
   
   .dropdown-menu {
-    min-width: 250px;
-    max-width: 95vw;
+    min-width: 160px;
+    max-width: 85vw;
+    border-radius: 6px;
   }
 }
 </style>
