@@ -513,28 +513,28 @@ watch(user, (newUser) => {
 }
 
 .dropdown-item {
-  color: var(--gray-700);
-  text-decoration: none;
+  color: var(--gray-700) !important;
+  text-decoration: none !important;
   font-size: 0.875rem;
-  padding: 0.75rem 1rem;
+  padding: 0.75rem 1rem !important;
   display: block;
   transition: all 0.2s ease;
   border-left: 3px solid transparent;
-  background: var(--gray-50);
+  background: var(--gray-50) !important;
   font-weight: 600;
   width: 100%;
   box-sizing: border-box;
 }
 
 .dropdown-item:hover {
-  color: var(--primary-blue);
-  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary-blue) !important;
+  background: rgba(59, 130, 246, 0.1) !important;
   border-left-color: var(--primary-blue);
 }
 
 .dropdown-category:hover .dropdown-item {
-  color: var(--primary-blue);
-  background: rgba(59, 130, 246, 0.1);
+  color: var(--primary-blue) !important;
+  background: rgba(59, 130, 246, 0.1) !important;
   border-left-color: var(--primary-blue);
 }
 
