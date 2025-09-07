@@ -7,7 +7,7 @@ import { getDoc, doc } from 'firebase/firestore'
 import { db } from '@/firebase/config'
 
 const router = createRouter({
-  history: createWebHistory('/'),
+  history: createWebHistory(import.meta.env.BASE_URL || '/'),
   routes: [
     {
       path: '/',
@@ -70,9 +70,15 @@ const router = createRouter({
 
 // Guard de navegación para rutas protegidas
 router.beforeEach((to, from, next) => {
+  console.log('Router navigation:', { from: from.path, to: to.path })
   // Permitir acceso a todas las rutas sin redirecciones automáticas
   // La verificación de permisos se hará en los componentes individuales
   next()
+})
+
+// Debug del router
+router.onError((error) => {
+  console.error('Router error:', error)
 })
 
 export default router
