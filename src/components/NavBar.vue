@@ -457,7 +457,7 @@ watch(user, (newUser) => {
   position: absolute;
   top: 100%;
   left: 0;
-  background: #ff0000 !important; /* ← ROJO PARA IDENTIFICAR CAMBIOS */
+  background: #ff0000 !important; /* ← ROJO PARA IDENTIFICAR CAMBIOS - VERCEL TEST */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 0, 0, 0.1);
