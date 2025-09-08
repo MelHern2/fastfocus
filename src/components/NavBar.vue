@@ -6,7 +6,6 @@
           <img src="/src/assets/logo-fast-focus-removebg-preview.png" alt="FastFocus" class="nav-logo" />
         </router-link>
       </div>
-aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaabbbb
       <div class="nav-menu">
         <router-link to="/" class="nav-link">Inicio</router-link>
         
