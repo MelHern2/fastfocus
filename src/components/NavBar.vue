@@ -9,6 +9,7 @@
       <div class="nav-menu">
         <router-link to="/" class="nav-link">Inicio</router-link>
         
+        
         <!-- Menú desplegable de categorías -->
         <div class="dropdown-container" @mouseenter="handleMouseEnter" @mouseleave="handleMouseLeave">
           <div class="nav-link dropdown-trigger">
