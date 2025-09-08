@@ -64,7 +64,7 @@ const props = defineProps<Props>()
 const emit = defineEmits<Emits>()
 
 // Debug para verificar los datos
-console.log('CategoryMenuItem props:', props.category)
+// console.log('CategoryMenuItem props:', props.category)
 
 const isHovered = ref(false)
 const isExpanded = ref(false)

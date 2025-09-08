@@ -21,5 +21,8 @@ export default defineConfig({
         manualChunks: undefined
       }
     }
+  },
+  css: {
+    devSourcemap: false
   }
 })

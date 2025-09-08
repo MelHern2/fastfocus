@@ -70,7 +70,6 @@ const router = createRouter({
 
 // Guard de navegación para rutas protegidas
 router.beforeEach((to, from, next) => {
-  console.log('Router navigation:', { from: from.path, to: to.path })
   // Permitir acceso a todas las rutas sin redirecciones automáticas
   // La verificación de permisos se hará en los componentes individuales
   next()
