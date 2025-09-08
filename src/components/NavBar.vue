@@ -538,14 +538,26 @@ watch(user, (newUser) => {
   border-left-color: var(--primary-blue);
 }
 
-/* Forzar estilos específicos para el dropdown */
-.dropdown-menu .dropdown-item {
+/* Forzar estilos específicos para el dropdown - Mayor especificidad */
+.navbar .dropdown-menu .dropdown-item {
   color: var(--gray-700) !important;
-  background: var(--gray-50) !important;
+  background: #ff0000 !important; /* ← ROJO PARA IDENTIFICAR CAMBIOS */
   padding: 0.75rem 1rem !important;
 }
 
-.dropdown-menu .dropdown-item:hover {
+.navbar .dropdown-menu .dropdown-item:hover {
+  color: var(--primary-blue) !important;
+  background: rgba(59, 130, 246, 0.1) !important;
+}
+
+/* Forzar estilos para router-link dentro del dropdown */
+.navbar .dropdown-menu .dropdown-item.router-link {
+  color: var(--gray-700) !important;
+  background: #ff0000 !important; /* ← ROJO PARA IDENTIFICAR CAMBIOS */
+  padding: 0.75rem 1rem !important;
+}
+
+.navbar .dropdown-menu .dropdown-item.router-link:hover {
   color: var(--primary-blue) !important;
   background: rgba(59, 130, 246, 0.1) !important;
 }
