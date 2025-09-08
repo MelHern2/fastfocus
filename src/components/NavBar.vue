@@ -457,7 +457,7 @@ watch(user, (newUser) => {
   position: absolute;
   top: 100%;
   left: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: #ff0000 !important; /* ← ROJO PARA IDENTIFICAR CAMBIOS */
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 0, 0, 0.1);
